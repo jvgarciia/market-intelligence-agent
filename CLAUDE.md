@@ -11,27 +11,34 @@ It is not documentation for humans. It is the persistent operating system for AI
 
 1. Read `project_context.md` to understand the current state of the project
 2. Check which files have changed recently if context is unclear (`git log --oneline -10`)
-3. Confirm the task fits the product vision before implementing
-4. After any major change, update `project_context.md` to reflect the new state
+3. Inspect the relevant files before proposing any changes — do not work from assumptions
+4. Confirm the task fits the product vision and the current learning phase before implementing
+5. State the current architecture and exactly how the proposed change fits into it
+6. List the exact files that will change and what will happen to each one
+7. Wait for user approval before making large, architectural, or multi-file changes
+8. After any major change, update `project_context.md` to reflect the new state
 
 **Never:**
 - Start coding before reading `project_context.md`
 - Make architectural changes without stating the reasoning out loud first
+- Propose implementation plans without first reading the files involved
+- Skip phases in the learning roadmap — each concept builds on the previous one
 - Rewrite working code to "clean it up" unless asked
 - Add features, abstractions, or dependencies that were not requested
+- Introduce complexity that does not serve the current learning phase
 
 ---
 
 ## Project Identity
 
 **What this is:**
-A reusable starter template for AI-powered web apps. Built so the owner never has to configure the same foundational setup twice. Copy the folder, rename it, add an API key, and a new project is running in under five minutes.
+The Market Intelligence Agent — an AI-powered system that researches companies, markets, and competitors on demand and returns structured, actionable intelligence reports. Not a generic chat app. A purposeful system with a defined job: take a research query, reason over it, and produce output a marketer or strategist can actually use.
 
 **Who it is for:**
-A marketing student learning to build with AI systems. Not a software engineer. Every decision must balance professional quality with educational clarity.
+A marketing student preparing for a technical + creative marketing internship at Hulo. Not a software engineer. Every feature teaches a real AI engineering concept — Claude API, tool calling, structured outputs, context engineering, agentic workflows, RAG, memory systems, evaluation, and human-out-of-the-loop automation.
 
 **The core promise:**
-This template should always feel like a launchpad, not a framework. It does the minimum required to start any AI app — and no more.
+Each phase of this project must be the simplest implementation that teaches the target concept and produces real value. No premature complexity. No features that skip phases. The learning roadmap and the product are the same thing.
 
 ---
 

@@ -1,6 +1,19 @@
-# AI Starter Template
+# Market Intelligence Agent
 
-A clean, reusable foundation for building AI-powered web apps. Built with Next.js, Tailwind CSS, and a provider-agnostic AI wrapper that supports Claude, OpenAI, and Gemini.
+An AI-powered system that researches companies, markets, and competitors on demand and returns structured, actionable intelligence reports.
+
+Built as a hands-on learning project for a technical + creative marketing internship at Hulo. Each feature teaches a real AI engineering concept — Claude API, tool calling, structured outputs, context engineering, agentic workflows, RAG, memory, evaluation, and automated pipelines.
+
+---
+
+## What It Does
+
+You ask a research question. The agent reasons over it and returns a structured intelligence report — not a chat bubble. The output is designed to be used directly in a deck, brief, or strategy document.
+
+**Example queries:**
+- "Who are the top three competitors to Hulo and what is their brand positioning?"
+- "What are the emerging trends in Gen Z fitness marketing for 2026?"
+- "Summarize the competitive landscape for AI-powered marketing tools."
 
 ---
 
@@ -11,31 +24,17 @@ A clean, reusable foundation for building AI-powered web apps. Built with Next.j
 npm install
 ```
 
-### 2. Set up your environment variables
+### 2. Set up environment variables
 ```bash
 cp .env.example .env.local
 ```
-Open `.env.local` and add your API key. Do **not** commit this file.
+Open `.env.local` and add your Anthropic API key. Do **not** commit this file.
 
 ### 3. Run the development server
 ```bash
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) to see the app.
-
----
-
-## Switching AI Providers
-
-Open `.env.local` and change `AI_PROVIDER`:
-
-| Value | Provider | SDK to install |
-|-------|----------|----------------|
-| `anthropic` | Claude (default) | Already included |
-| `openai` | GPT-4o | `npm install openai` |
-| `gemini` | Gemini 1.5 Pro | `npm install @google/generative-ai` |
-
-Then add the matching API key in `.env.local`.
 
 ---
 
@@ -48,13 +47,31 @@ Then add the matching API key in `.env.local`.
 │   ├── globals.css        # Global styles + Tailwind imports
 │   └── api/chat/route.js  # AI API endpoint (POST /api/chat)
 ├── components/
-│   └── ChatBox.js         # Drop-in chat UI component
+│   └── ChatBox.js         # Chat UI component
 ├── lib/
-│   └── ai.js              # AI provider wrapper — one function to call any model
+│   └── ai.js              # AI provider wrapper — all AI calls go here
 ├── .env.example           # Template for environment variables
-├── .env.local             # Your real keys (never committed)
-└── project_context.md     # Rules and context for Claude Code
+├── .env.local             # Real secrets (never committed)
+├── project_context.md     # Living project state — Claude Code reads this every session
+└── CLAUDE.md              # Permanent operating rules for Claude Code
 ```
+
+---
+
+## Learning Roadmap
+
+| Phase | Concept | Status |
+|-------|---------|--------|
+| 1 | Claude Code workflow + Git habits | In progress |
+| 2 | Claude API + API routes | — |
+| 3 | Tool calling | — |
+| 4 | Structured outputs | — |
+| 5 | Context engineering | — |
+| 6 | Agentic workflows | — |
+| 7 | RAG + vector databases | — |
+| 8 | Memory systems | — |
+| 9 | Evaluation systems | — |
+| 10 | Human-out-of-the-loop automation | — |
 
 ---
 
@@ -71,52 +88,12 @@ Then add the matching API key in `.env.local`.
 
 ## Deploying to Vercel
 
-### Option A — Deploy from GitHub (recommended)
 1. Push this project to a GitHub repository
-2. Go to [vercel.com](https://vercel.com) and click **Add New Project**
-3. Import your repository
-4. In the **Environment Variables** section, add:
-   - `AI_PROVIDER` → `anthropic` (or your chosen provider)
+2. Go to [vercel.com](https://vercel.com) → **Add New Project** → import your repo
+3. Add environment variables in the Vercel dashboard (**Settings → Environment Variables**):
+   - `AI_PROVIDER` → `anthropic`
    - `ANTHROPIC_API_KEY` → your real API key
-   - `NEXT_PUBLIC_APP_NAME` → your app's display name
-5. Click **Deploy**
+   - `NEXT_PUBLIC_APP_NAME` → `Market Intelligence Agent`
+4. Click **Deploy**
 
-### Option B — Deploy from terminal
-```bash
-npm install -g vercel
-vercel
-```
-Follow the prompts. Add environment variables in the Vercel dashboard after.
-
-### Important: Environment variables in Vercel
-Variables in `.env.local` are **not** uploaded to Vercel automatically. You must add them manually in your project's Vercel dashboard under **Settings → Environment Variables**.
-
----
-
-## AI Workflow Layer
-
-This template is designed to work with a set of globally installed AI skills that extend Claude Code's capabilities. When present in your environment, they activate automatically at the right moment in the build process.
-
-| Skill | What it does | When it activates |
-|-------|-------------|-------------------|
-| `llm-council` | Runs a decision through 5 independent AI advisors + peer review → chairman verdict + HTML report | Before committing to a product direction or major architecture change |
-| `ui-ux-pro-max` | Searchable design database: UX patterns, color palettes, font pairings, chart types | When designing a new page, choosing a visual style, or looking for SaaS UX patterns |
-| `emil-design-eng` | Reviews UI for animation timing, easing, press feedback, and interaction polish | After layout is set — before shipping a user-facing surface |
-| `find-skills` | Searches the skills.sh ecosystem for installable domain-specific skills | When a task feels specialized and a dedicated skill might exist |
-
-**Install missing skills via terminal:**
-```bash
-npx skills add [owner/repo@skill-name] -g   # install globally
-npx skills find [query]                     # search the ecosystem
-```
-
-These skills are global — they travel with you across every project, not just this one.
-
----
-
-## Customizing for a New Project
-
-1. Change `NEXT_PUBLIC_APP_NAME` in `.env.local`
-2. Edit the system prompt in `lib/ai.js` (the `DEFAULT_SYSTEM_PROMPT` constant)
-3. Modify `app/page.js` to change the UI
-4. Add new API routes in `app/api/` as your app grows
+Variables in `.env.local` are never uploaded to Vercel automatically — they must be added manually.

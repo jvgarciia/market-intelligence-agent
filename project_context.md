@@ -1,4 +1,4 @@
-# Project Context — AI Starter Template
+# Project Context — Market Intelligence Agent
 
 This file is the memory and rulebook for Claude Code. Read it at the start of every session.
 
@@ -6,11 +6,82 @@ This file is the memory and rulebook for Claude Code. Read it at the start of ev
 
 ## What This Project Is
 
-A reusable starter template for building AI-powered web apps quickly. The goal is to never
-start from scratch again — copy this folder, rename it, and a new project is ready in minutes.
+**Market Intelligence Agent** — an AI-powered system that researches companies, markets, and competitors on demand and returns structured, actionable intelligence reports.
 
-The primary user is a marketing student learning AI systems. The code must be readable and
-educational, not just functional.
+This is not a generic chat app. It is a purposeful AI system with a defined job: take a research query, gather and synthesize information using AI tools and structured reasoning, and produce output that is actually useful to a marketer or strategist.
+
+**Why this project exists:**
+The builder is preparing for a technical + creative marketing internship at Hulo. This project is the learning vehicle — each feature teaches a real AI engineering concept that will be valuable on the job and in every future project.
+
+---
+
+## Who This Is For
+
+**Builder:** A marketing student learning to build with AI systems — not a software engineer. Code must be readable, educational, and explained clearly.
+
+**End user of the product:** Someone who needs fast, structured market research — competitive landscape, brand positioning, trend signals — without spending hours doing it manually.
+
+---
+
+## Learning Roadmap
+
+Each phase of this project is designed to teach a specific AI engineering concept:
+
+| Phase | Concept | What gets built |
+|-------|---------|-----------------|
+| 1 | Claude Code workflow + Git habits | Project setup, version control, documentation |
+| 2 | Claude API + API routes | Basic AI query → structured response |
+| 3 | Tool calling | Agent that can use search, scrape, or other tools |
+| 4 | Structured outputs | Reports with consistent, parseable JSON schemas |
+| 5 | Context engineering | System prompts that produce reliable, high-quality intelligence |
+| 6 | Agentic workflows | Multi-step research pipelines with intermediate reasoning |
+| 7 | RAG + vector databases | Persistent knowledge base the agent can query |
+| 8 | Memory systems | Agent that remembers past research sessions |
+| 9 | Evaluation systems | Automated quality scoring for agent outputs |
+| 10 | Human-out-of-the-loop | Scheduled, automated intelligence delivery |
+
+**Current phase:** Phase 1 — Project setup and documentation.
+
+---
+
+## Product Vision
+
+A marketing professional opens the app, types a research question — "Who are Hulo's top three competitors and what is their brand positioning?" — and within seconds receives a structured intelligence report with source reasoning, key findings, and strategic takeaways.
+
+The agent does not just chat. It reasons, gathers, and synthesizes. The output is designed to be dropped into a deck or brief with minimal editing.
+
+---
+
+## V1 Scope
+
+V1 is the smallest thing that demonstrates the core loop:
+
+1. User enters a research query
+2. The AI processes it with a structured intelligence prompt
+3. The response is returned as a formatted report (not a chat bubble)
+4. The report includes: Summary, Key Findings, Strategic Implications
+
+**V1 does NOT include:**
+- Real-time web search or scraping (Phase 3+)
+- Persistent memory or saved reports (Phase 7+)
+- User accounts or authentication
+- Database or file storage
+- Automated scheduling
+- Multi-step agentic pipelines
+- Vector search or RAG
+- Evaluation scoring
+
+V1 proves the interaction model and report format before adding complexity.
+
+---
+
+## Architecture Principles
+
+1. **All AI calls go through `lib/ai.js`** — no exceptions. Provider-switching must always be a one-line change.
+2. **One file, one responsibility** — if a file needs "and" to describe what it does, split it.
+3. **No premature abstraction** — build for what is needed now, not hypothetical future features.
+4. **Server/client boundary is strict** — secrets and AI calls stay server-side; UI stays client-side.
+5. **Structured over conversational** — outputs should be formatted reports, not chat text.
 
 ---
 
@@ -18,130 +89,82 @@ educational, not just functional.
 
 | Layer | Technology | Why |
 |-------|-----------|-----|
-| Framework | Next.js 14 (App Router) | Vercel-native, handles frontend + backend in one project |
-| Styling | Tailwind CSS | Utility classes, no separate CSS files, fast to write |
-| AI Layer | `lib/ai.js` wrapper | Swap providers by changing one env variable |
-| Default AI | Anthropic Claude (`claude-sonnet-4-6`) | Best general-purpose model |
-| Deployment | Vercel | Zero-config, free tier, integrates with GitHub |
-| Language | JavaScript (no TypeScript) | Simpler for a non-developer learning codebase |
+| Framework | Next.js 14 (App Router) | Vercel-native, frontend + backend in one project |
+| Styling | Tailwind CSS | Fast, consistent, no separate CSS files |
+| AI Layer | `lib/ai.js` wrapper | One place for all AI logic |
+| Default AI | Anthropic Claude (`claude-sonnet-4-6`) | Best reasoning and structured output quality |
+| Deployment | Vercel | Zero-config, integrates with GitHub |
+| Language | JavaScript (no TypeScript) | Simpler for a learner; type safety can be added later |
 
 ---
 
 ## Rules Claude Code Must Follow
 
+### Before writing any code
+- Read this file first
+- Check recent git history if context is unclear: `git log --oneline -10`
+- Inspect the relevant files before proposing changes
+- State the current architecture and how the change fits into it
+- Propose an implementation plan with the exact files to change
+- Wait for approval before making large or architectural changes
+
 ### Code quality
-- Keep code simple. No over-engineering. One file should do one thing.
-- No TypeScript unless the user explicitly asks for it.
-- Avoid adding features or abstractions beyond what was requested.
-- Do not add comments that explain *what* the code does — only add a comment if the *why* is non-obvious.
+- Keep code simple. No over-engineering. One file does one thing.
+- No TypeScript unless explicitly requested.
+- No features, abstractions, or dependencies beyond what was asked for.
+- No comments that explain *what* — only comments that explain *why* when it is non-obvious.
 
 ### Security
 - Never hard-code API keys. Always use environment variables.
-- Validate inputs at API routes (check that required fields exist).
-- Never expose internal error messages to the frontend in production.
+- Validate inputs at every API route before passing them further.
+- Never expose internal error details to the frontend.
 
 ### Style
-- Use Tailwind CSS for all styling. No inline `style={}` props.
-- Keep components small and focused.
-- File names: `PascalCase` for components, `camelCase` for lib files.
+- Tailwind CSS for all styling. No inline `style={}` props.
+- `PascalCase` for components, `camelCase` for lib files and API routes.
+- `@/` path aliases for all imports.
 
 ### AI provider
-- All AI calls must go through `lib/ai.js`. Never import an AI SDK directly in a page or component.
-- The default provider is Anthropic Claude.
-- Changing providers requires only changing `AI_PROVIDER` in `.env.local`.
-
----
-
-## Browser Testing Workflow
-
-Browser testing is part of the standard development loop for this project, not a separate QA phase.
-
-**Use the connected Chrome integration after any change that affects UI, interaction, or API responses.**
-
-Quick reference — trigger browser testing when:
-- A component, layout, or style was changed
-- A form, button, or interactive element was added or modified
-- An API route response changed and the UI depends on it
-- The app was deployed and the live URL needs verification
-
-Do NOT open the browser for:
-- Pure logic or utility changes with no visual output
-- Documentation edits
-- Environment variable changes
-
-**Standard sequence for every UI change:**
-1. Confirm dev server is running (`npm run dev`)
-2. Load the page, verify no blank screen or console errors
-3. Test the changed interaction end-to-end
-4. Check browser console — zero red errors is the bar
-5. Verify edge cases (empty input, loading state, error state)
-
-**Scope rule:** Browser testing is for validation only — not autonomous redesign. Report discovered issues before fixing anything outside the original task scope.
-
-Full browser testing rules and decision tables live in `CLAUDE.md` under **Browser Testing Workflow**.
-
----
-
-## Secondary AI Review Workflow
-
-This project uses a structured, human-directed multi-AI workflow — not an autonomous agent system.
-
-**The four layers, in order:**
-1. **Human** — sets direction, approves changes, owns product decisions
-2. **Primary AI** — implements, architects, maintains project context
-3. **Secondary AI** — reviews, debugs, checks adversarially when needed
-4. **Browser** — validates real behavior after code and review are complete
-
-**Use secondary AI review when:**
-- A new API route, security-adjacent change, or multi-file refactor was made
-- A bug could not be isolated after two attempts
-- A deployment failed and the cause is unclear
-- The primary AI flagged uncertainty about an approach
-
-**Skip secondary AI review when:**
-- The change is small, contained, and browser-tested successfully
-- It's a documentation, config, or environment variable update
-- The feature is still being actively iterated — wait for it to stabilize
-
-**Core rules:**
-- One primary AI agent at a time — no parallel architecture sessions
-- Secondary AI produces a report; the primary agent applies approved changes
-- Human approves changes between every layer — no autonomous handoffs
-- Project context must be summarized before switching AI tools
-
-Full workflow rules, responsibility tables, and anti-patterns live in `CLAUDE.md` under **Secondary AI Review Workflow**.
-
----
-
-## Core AI Builder Stack
-
-Globally installed skills that activate on demand. Not stored in this repo.
-
-| Skill | Trigger it when... | Do NOT use for... |
-|-------|-------------------|-------------------|
-| `llm-council` | High-stakes product/architecture decision · "council this" · "pressure-test this" | Coding tasks, bug fixes, clear-answer questions |
-| `ui-ux-pro-max` | Building a new page type, choosing a visual style, finding UX patterns | Backend logic, component-level animation polish |
-| `emil-design-eng` | Refining interaction feel, animation timing, press feedback, easing | Strategic decisions, early wireframes |
-| `find-skills` | Task sounds specialized · "find a skill for X" | Tasks with a known approach |
-| `[gsd]` | *Not yet installed* — execution mindset for fast shipping | — |
-
-**Layering order:** `llm-council` → `[gsd]` → `ui-ux-pro-max` → `emil-design-eng` → browser test → ship
-
-Full skill documentation, trigger phrases, CLI commands, and interaction rules live in `CLAUDE.md` under **Core AI Builder Stack**.
-
-**Skill usage verification rule:** When a skill is used, state which skill, why it was invoked, what it specifically contributed, and what decisions it changed. For design tasks: `ui-ux-pro-max` contributions first, then `emil-design-eng`. Do not claim a skill was used unless its output actually influenced the result.
+- All AI calls go through `lib/ai.js`. Never import AI SDKs in components or pages.
+- Default provider is Anthropic Claude.
 
 ---
 
 ## How to Explain Changes
 
-Every time a file is created or modified, Claude Code should explain:
+Every time a file is created or modified, Claude Code must explain:
 
-1. **What changed** — which file(s) and what was done
-2. **Why it matters** — the reason behind the decision, not just what it does
-3. **What to learn from it** — one concept or pattern the user can take away
+1. **What changed** — which file(s) and exactly what was done
+2. **Why it matters** — the architectural or product reason for the decision
+3. **What to learn from it** — one transferable concept written for a non-developer
 
-Keep explanations short, plain, and written for a non-developer. No jargon without a definition.
+Keep explanations short, plain, and jargon-free (or define the jargon in the same sentence).
+
+---
+
+## Browser Testing Workflow
+
+Use Chrome browser testing after any change that affects what the user sees or interacts with.
+
+**Trigger browser testing when:**
+- A component, layout, or style was changed
+- A form, button, or interactive element was added or modified
+- An API route response changed and the UI depends on it
+- The app was deployed and the live URL needs verification
+
+**Skip browser testing for:**
+- Pure logic or utility changes with no visual output
+- Documentation edits
+- Environment variable changes
+
+**Standard sequence:**
+1. Confirm dev server is running (`npm run dev`)
+2. Load the page — verify no blank screen or console errors
+3. Test the changed interaction end-to-end
+4. Check browser console — zero red errors is the bar
+5. Verify edge cases: empty input, loading state, error state
+
+**Scope rule:** Browser testing is for validation only — not autonomous redesign. Report discovered issues before fixing anything outside the original task scope.
 
 ---
 
@@ -149,12 +172,12 @@ Keep explanations short, plain, and written for a non-developer. No jargon witho
 
 1. Push code to GitHub
 2. Import project in Vercel dashboard
-3. Add environment variables manually in Vercel (they are never uploaded from `.env.local`)
-4. Vercel auto-deploys on every push to the main branch
+3. Add environment variables manually in Vercel (never uploaded from `.env.local`)
+4. Vercel auto-deploys on every push to main branch
 
-**Variables required in Vercel:**
+**Required variables in Vercel:**
 - `AI_PROVIDER`
-- `ANTHROPIC_API_KEY` (or whichever provider key is in use)
+- `ANTHROPIC_API_KEY`
 - `NEXT_PUBLIC_APP_NAME`
 
 ---
@@ -163,36 +186,17 @@ Keep explanations short, plain, and written for a non-developer. No jargon witho
 
 | File | Purpose |
 |------|---------|
-| `app/layout.js` | The HTML shell. Wraps every page. Set fonts, metadata, global styles here. |
-| `app/page.js` | The homepage. Edit this to change what the user sees first. |
-| `app/api/chat/route.js` | The AI backend. Receives messages from the UI, calls the AI, returns the reply. |
-| `lib/ai.js` | The AI brain. Routes to the right provider. Edit the system prompt here. |
-| `components/ChatBox.js` | Reusable chat UI. Drop `<ChatBox />` onto any page to add chat. |
-| `.env.local` | Your secrets. Never committed. Copy from `.env.example`. |
-| `project_context.md` | This file. Claude Code reads it to understand the project. |
-
----
-
-## Coding Style Examples
-
-**Good:**
-```js
-const reply = await chat(messages);
-return NextResponse.json({ reply });
-```
-
-**Avoid:**
-```js
-// This function calls the AI and returns the response
-const aiResponse = await callTheArtificialIntelligenceProvider(messageArray);
-const jsonResponseObject = NextResponse.json({ reply: aiResponse });
-return jsonResponseObject;
-```
+| `app/layout.js` | HTML shell — fonts, metadata, global styles |
+| `app/page.js` | Homepage — composes the main UI |
+| `app/api/chat/route.js` | AI backend endpoint — validates input, calls AI, returns response |
+| `lib/ai.js` | AI provider wrapper — only place where AI SDKs are imported |
+| `components/ChatBox.js` | Chat UI component (will be replaced with IntelligenceReport UI in V1) |
+| `.env.local` | Real secrets — never committed |
+| `project_context.md` | This file — Claude Code reads it every session |
 
 ---
 
 ## Project History
 
-- Created: 2026-05-09
-- Purpose: Reusable AI web app starter for a marketing student
-- Stack chosen for: simplicity, Vercel compatibility, AI-first structure
+- **2026-05-09** — Created as a generic AI starter template
+- **2026-06-04** — Renamed and repurposed as Market Intelligence Agent; documentation updated to define product vision, learning roadmap, V1 scope, and architecture principles
