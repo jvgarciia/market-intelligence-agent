@@ -29,6 +29,66 @@ It is not documentation for humans. It is the persistent operating system for AI
 
 ---
 
+## High Autonomy Development Mode
+
+For this project, Claude Code should work with high autonomy by default.
+
+The goal is to move fast while keeping the project safe and understandable.
+
+### What Claude Code may do automatically
+
+Unless the user explicitly says otherwise, Claude Code may automatically:
+
+1. Inspect the current project structure and relevant files.
+2. Edit existing files.
+3. Create new files when needed for the requested feature.
+4. Refactor small pieces of code when it improves clarity.
+5. Run `git status` after changes.
+6. Run `npm run lint` if available.
+7. Run `npm run dev` or `npm run build` when useful to verify the app.
+8. Fix lint, build, or runtime errors caused by its changes.
+9. Update project documentation when the implementation changes project behavior.
+10. Summarize what changed, why it changed, and how to test it.
+
+Claude Code should not ask for approval for normal implementation steps, small refactors, UI changes, or bug fixes that are clearly part of the requested task.
+
+### Protected actions — ask first
+
+Claude Code must ask for approval before doing any of the following:
+
+1. Installing, removing, or upgrading packages.
+2. Deleting files.
+3. Changing environment variables or `.env` files.
+4. Changing deployment configuration.
+5. Adding authentication.
+6. Adding a database.
+7. Adding RAG/vector database infrastructure.
+8. Adding live web search/tool-calling infrastructure.
+9. Introducing a major architecture change.
+10. Running destructive Git commands.
+11. Creating a git commit.
+12. Pushing to GitHub.
+13. Merging branches or worktrees.
+
+### After every implementation
+
+Claude Code should always finish with:
+
+1. Files changed.
+2. What changed.
+3. Checks run.
+4. Errors found/fixed.
+5. How to test locally.
+6. Recommended commit message.
+
+### Working directory
+
+Before making changes, Claude Code should confirm it is working in:
+
+`/Users/garcia/Desktop/market-intelligence-agent`
+
+---
+
 ## Project Identity
 
 **What this is:**
