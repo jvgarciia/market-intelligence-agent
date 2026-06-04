@@ -1,0 +1,4 @@
+/* These three lines load the Tailwind CSS system into your project */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
