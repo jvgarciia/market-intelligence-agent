@@ -10,6 +10,7 @@ export default function ResearchForm() {
   const [focus, setFocus] = useState(DEFAULT_FOCUS);
   const [report, setReport] = useState(null);
   const [sourceCount, setSourceCount] = useState(0);
+  const [toolCallCount, setToolCallCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -32,6 +33,7 @@ export default function ResearchForm() {
 
       setReport(data.reply);
       setSourceCount(typeof data.sourceCount === 'number' ? data.sourceCount : 0);
+      setToolCallCount(typeof data.toolCallCount === 'number' ? data.toolCallCount : 0);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -60,7 +62,7 @@ export default function ResearchForm() {
             </p>
             <p className={`text-xs mt-1.5 ${sourceCount > 0 ? 'text-emerald-600' : 'text-amber-600'}`}>
               {sourceCount > 0
-                ? `Grounded in ${sourceCount} live web sources`
+                ? `Grounded in ${sourceCount} live web sources · ${toolCallCount} ${toolCallCount === 1 ? 'search' : 'searches'} run by the agent`
                 : 'Generated from model knowledge — live search unavailable'}
             </p>
           </div>

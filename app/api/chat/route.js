@@ -1,20 +1,24 @@
 import { NextResponse } from 'next/server';
-import { chat } from '@/lib/ai';
+import { chat, chatWithTools } from '@/lib/ai';
 import { MARKET_INTELLIGENCE_SYSTEM_PROMPT } from '@/lib/prompts/marketIntelligencePrompt';
 import { FOCUS_OPTIONS, DEFAULT_FOCUS, MAX_INPUT_LENGTH } from '@/lib/focusOptions';
-import { searchWeb, isSearchConfigured } from '@/lib/tools/webSearch';
+import { searchWeb, isSearchConfigured, webSearchTool } from '@/lib/tools/webSearch';
 
-// Search + generation can exceed Vercel's default function timeout
-export const maxDuration = 120;
+// The agentic loop can make up to 5 sequential Claude calls plus searches
+export const maxDuration = 180;
+
+const MAX_SEARCHES_PER_REPORT = 4;
 
 /**
  * POST /api/chat
  *
- * Accepts a market intelligence research request, runs live web searches
- * when configured, and returns a structured report.
+ * Accepts a market intelligence research request. When live search is
+ * configured, Claude runs an agentic loop: it decides what to search,
+ * observes results, and searches again if needed before writing the
+ * report. Without a search key it falls back to model knowledge.
  *
  * Request body: { company: string, industry?: string, focus?: string }
- * Response:     { reply: string, sourceCount: number } or { error: string }
+ * Response:     { reply, sourceCount, toolCallCount, sources } or { error }
  */
 export async function POST(request) {
   try {
@@ -37,67 +41,47 @@ export async function POST(request) {
       return badRequest(`Unknown research focus. Valid options: ${FOCUS_OPTIONS.join(', ')}.`);
     }
 
-    const sources = await gatherSources(company, industry);
+    const messages = [{ role: 'user', content: buildUserMessage(company, industry, focus) }];
 
-    const reply = await chat(
-      [{ role: 'user', content: buildUserMessage(company, industry, focus, sources) }],
-      { systemPrompt: MARKET_INTELLIGENCE_SYSTEM_PROMPT }
-    );
+    if (!isSearchConfigured()) {
+      const reply = await chat(messages, { systemPrompt: MARKET_INTELLIGENCE_SYSTEM_PROMPT });
+      return NextResponse.json({ reply, sourceCount: 0, toolCallCount: 0, sources: [] });
+    }
 
-    return NextResponse.json({ reply, sourceCount: sources.length });
+    // The route owns source tracking; the loop in lib/ai.js stays generic
+    const sources = [];
+    const seenUrls = new Set();
+
+    const { text, toolCallCount } = await chatWithTools(messages, {
+      systemPrompt: MARKET_INTELLIGENCE_SYSTEM_PROMPT,
+      tools: [webSearchTool],
+      maxToolCalls: MAX_SEARCHES_PER_REPORT,
+      async executeToolCall(name, input) {
+        if (name !== 'web_search') throw new Error(`Unknown tool: ${name}`);
+        const results = await searchWeb(input.query);
+        for (const result of results) {
+          if (result.url && !seenUrls.has(result.url)) {
+            seenUrls.add(result.url);
+            sources.push({ title: result.title, url: result.url });
+          }
+        }
+        return results;
+      },
+    });
+
+    console.log(`[/api/chat] Grounded report: ${toolCallCount} searches, ${sources.length} sources`);
+
+    return NextResponse.json({ reply: text, sourceCount: sources.length, toolCallCount, sources });
   } catch (error) {
     console.error('[/api/chat] Error:', error.status || 'no-status', '-', error.message);
     return NextResponse.json({ error: errorMessageFor(error) }, { status: 500 });
   }
 }
 
-/**
- * V2.0: three fixed research angles, searched in parallel.
- * A failed or unconfigured search never blocks the report — the model
- * falls back to training knowledge and the UI says so.
- */
-async function gatherSources(company, industry) {
-  if (!isSearchConfigured()) return [];
-
-  const suffix = industry ? ` ${industry}` : '';
-  const queries = [
-    `${company} company overview business model${suffix}`,
-    `${company} competitors and alternatives${suffix}`,
-    `${company} marketing strategy brand positioning recent`,
-  ];
-
-  const settled = await Promise.allSettled(queries.map((q) => searchWeb(q)));
-
-  const seen = new Set();
-  const sources = [];
-  settled.forEach((result, i) => {
-    if (result.status === 'rejected') {
-      console.warn(`[/api/chat] Search failed for "${queries[i]}":`, result.reason.message);
-      return;
-    }
-    for (const item of result.value) {
-      if (!item.url || seen.has(item.url)) continue;
-      seen.add(item.url);
-      sources.push(item);
-    }
-  });
-
-  return sources;
-}
-
-function buildUserMessage(company, industry, focus, sources) {
+function buildUserMessage(company, industry, focus) {
   const lines = [`Company: ${company}`];
   if (industry) lines.push(`Industry: ${industry}`);
   lines.push(`Research focus: ${focus}`);
-
-  if (sources.length > 0) {
-    const today = new Date().toISOString().slice(0, 10);
-    lines.push(`\nWEB SEARCH RESULTS (retrieved ${today}):`);
-    sources.forEach((source, i) => {
-      lines.push(`\n[${i + 1}] ${source.title}\nURL: ${source.url}\n${source.content}`);
-    });
-  }
-
   lines.push('\nGenerate a full Market Intelligence Report for this company.');
   return lines.join('\n');
 }

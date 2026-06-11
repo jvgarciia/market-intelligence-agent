@@ -10,6 +10,8 @@ Built as a hands-on learning project for a technical + creative marketing intern
 
 You enter a company name, optionally an industry, and a research focus. The agent returns a structured seven-section intelligence report — rendered as readable sections with a copy button, not a chat bubble. The report goes deeper on your selected focus, marks unverifiable claims as inferences, and ends with a confidence note telling you what to verify first.
 
+When a Tavily key is configured, Claude runs a real agentic loop: it decides what to search on the live web (up to 4 searches), observes the results, searches again if needed, then writes the report grounded in what it found — with inline citations and a Sources Used section.
+
 **Example queries:**
 - "Who are the top three competitors to Hulo and what is their brand positioning?"
 - "What are the emerging trends in Gen Z fitness marketing for 2026?"
