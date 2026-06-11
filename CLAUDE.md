@@ -87,6 +87,8 @@ Before making changes, Claude Code should confirm it is working in:
 
 `/Users/garcia/Desktop/market-intelligence-agent`
 
+Do not create worktrees or branches automatically. Work directly in the main working directory unless the user explicitly asks for a branch or PR workflow.
+
 ---
 
 ## Project Identity
