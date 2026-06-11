@@ -288,6 +288,35 @@ This project currently has one real page (`app/page.js`). Future test routes sho
 
 Browser testing is part of the standard development workflow, not an optional extra step.
 
+### Mandatory browser verification rule
+
+Terminal/API tests (curl, scripts) are enough for backend-only changes.
+
+But for any change involving:
+
+- components
+- page layout
+- loading states
+- buttons/forms
+- report rendering
+- badges/messages
+- clickable links
+- user-visible errors
+- end-to-end app behavior
+
+Claude must use the Claude in Chrome browser tool or the Claude Preview tool when available.
+
+**Required browser checks:**
+
+1. Open the local app in Chrome/Preview.
+2. Submit a realistic test query.
+3. Confirm the UI renders correctly.
+4. Check the browser console for errors.
+5. If links/buttons/forms changed, interact with them.
+6. Report what was visually verified.
+
+If browser tools are unavailable, Claude must explicitly say so and fall back to terminal/API testing.
+
 ### When to use browser testing
 
 Use the connected Chrome integration after any change that affects what the user sees or interacts with:
