@@ -40,7 +40,7 @@ Each phase of this project is designed to teach a specific AI engineering concep
 | 9 | Evaluation systems | Automated quality scoring for agent outputs |
 | 10 | Human-out-of-the-loop | Scheduled, automated intelligence delivery |
 
-**Current phase:** Phase 1 — Project setup and documentation.
+**Current phase:** Phase 3 (in progress) — Tool calling. V2.0 adds live web search via Tavily with fixed queries injected into context; V2.1 will add the real Claude tool-use loop.
 
 ---
 
@@ -191,6 +191,7 @@ Use Chrome browser testing after any change that affects what the user sees or i
 | `app/api/chat/route.js` | AI backend endpoint — validates `{ company, industry, focus }`, calls AI, returns report |
 | `lib/ai.js` | AI wrapper (Anthropic-only for V1) — only place where AI SDKs are imported |
 | `lib/focusOptions.js` | Shared research-focus constants — imported by both form and API so they never drift |
+| `lib/tools/webSearch.js` | Tavily web search — query, trim, return prompt-safe results; one file per tool |
 | `lib/prompts/marketIntelligencePrompt.js` | The analyst system prompt — report structure, data-honesty rules, depth weighting |
 | `components/ResearchForm.js` | Research form — owns query/report/loading/error state |
 | `components/ReportView.js` | Parses the markdown report into styled sections; copy-to-clipboard |
@@ -206,3 +207,4 @@ Use Chrome browser testing after any change that affects what the user sees or i
 - **2026-06-04** — Renamed and repurposed as Market Intelligence Agent; documentation updated to define product vision, learning roadmap, V1 scope, and architecture principles
 - **2026-06-04** — V1 implemented: research form (company, industry, focus) → structured seven-section report via `lib/prompts/marketIntelligencePrompt.js`; AI wrapper made Anthropic-only
 - **2026-06-11** — V1.1 polish: report rendered as styled sections via `components/ReportView.js` (hand-rolled parser, zero new packages); system prompt upgraded with data-honesty rules, focus-weighted depth, and a closing confidence note; shared `lib/focusOptions.js` validates focus on both client and server; clearer loading/error states
+- **2026-06-11** — V2.0 live search plumbing: `lib/tools/webSearch.js` calls Tavily via plain fetch; route runs 3 fixed parallel searches (overview, competitors, recent positioning) and injects numbered, trimmed sources into the prompt; reports cite sources inline and end with a Sources Used section; graceful fallback to model-knowledge-only when `TAVILY_API_KEY` is missing or searches fail; UI shows grounding status. No tool-use loop yet — that is V2.1

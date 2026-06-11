@@ -9,6 +9,7 @@ export default function ResearchForm() {
   const [industry, setIndustry] = useState('');
   const [focus, setFocus] = useState(DEFAULT_FOCUS);
   const [report, setReport] = useState(null);
+  const [sourceCount, setSourceCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -30,6 +31,7 @@ export default function ResearchForm() {
       if (!res.ok) throw new Error(data.error || 'Request failed');
 
       setReport(data.reply);
+      setSourceCount(typeof data.sourceCount === 'number' ? data.sourceCount : 0);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -55,6 +57,11 @@ export default function ResearchForm() {
             <p className="text-xs text-gray-400 mt-0.5">
               {focus}
               {industry ? ` · ${industry}` : ''}
+            </p>
+            <p className={`text-xs mt-1.5 ${sourceCount > 0 ? 'text-emerald-600' : 'text-amber-600'}`}>
+              {sourceCount > 0
+                ? `Grounded in ${sourceCount} live web sources`
+                : 'Generated from model knowledge — live search unavailable'}
             </p>
           </div>
           <button
@@ -145,7 +152,7 @@ export default function ResearchForm() {
       {isLoading && (
         <div className="flex items-center gap-3 text-sm text-gray-500 bg-gray-50 rounded-xl px-4 py-3">
           <span className="h-2 w-2 rounded-full bg-gray-400 animate-pulse" />
-          Analyzing {company.trim()} — a full report takes about a minute.
+          Searching the web for {company.trim()}, then writing the report — about 90 seconds.
         </div>
       )}
 

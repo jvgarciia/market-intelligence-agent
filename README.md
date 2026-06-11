@@ -28,7 +28,7 @@ npm install
 ```bash
 cp .env.example .env.local
 ```
-Open `.env.local` and add your Anthropic API key. Do **not** commit this file.
+Open `.env.local` and add your Anthropic API key. Optionally add a free [Tavily](https://tavily.com) key as `TAVILY_API_KEY` to ground reports in live web search results — without it, reports are generated from model knowledge only. Do **not** commit this file.
 
 ### 3. Run the development server
 ```bash

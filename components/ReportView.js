@@ -108,13 +108,29 @@ function renderBlocks(lines) {
 }
 
 function renderInline(text) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-    part.startsWith('**') && part.endsWith('**') ? (
-      <strong key={i} className="font-semibold text-gray-900">
-        {part.slice(2, -2)}
-      </strong>
-    ) : (
-      part
-    )
-  );
+  // One pass over both markdown patterns we emit: [label](url) links and **bold**
+  return text.split(/(\[[^\]]*\]\([^)]+\)|\*\*[^*]+\*\*)/g).map((part, i) => {
+    const link = part.match(/^\[([^\]]*)\]\(([^)]+)\)$/);
+    if (link) {
+      return (
+        <a
+          key={i}
+          href={link[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-900 underline decoration-gray-300 underline-offset-2 hover:decoration-gray-700 transition"
+        >
+          {link[1]}
+        </a>
+      );
+    }
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={i} className="font-semibold text-gray-900">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return part;
+  });
 }
