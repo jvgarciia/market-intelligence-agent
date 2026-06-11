@@ -188,9 +188,13 @@ Use Chrome browser testing after any change that affects what the user sees or i
 |------|---------|
 | `app/layout.js` | HTML shell — fonts, metadata, global styles |
 | `app/page.js` | Homepage — composes the main UI |
-| `app/api/chat/route.js` | AI backend endpoint — validates input, calls AI, returns response |
-| `lib/ai.js` | AI provider wrapper — only place where AI SDKs are imported |
-| `components/ChatBox.js` | Chat UI component (will be replaced with IntelligenceReport UI in V1) |
+| `app/api/chat/route.js` | AI backend endpoint — validates `{ company, industry, focus }`, calls AI, returns report |
+| `lib/ai.js` | AI wrapper (Anthropic-only for V1) — only place where AI SDKs are imported |
+| `lib/focusOptions.js` | Shared research-focus constants — imported by both form and API so they never drift |
+| `lib/prompts/marketIntelligencePrompt.js` | The analyst system prompt — report structure, data-honesty rules, depth weighting |
+| `components/ResearchForm.js` | Research form — owns query/report/loading/error state |
+| `components/ReportView.js` | Parses the markdown report into styled sections; copy-to-clipboard |
+| `components/ChatBox.js` | Legacy chat UI — kept as reference, no longer rendered |
 | `.env.local` | Real secrets — never committed |
 | `project_context.md` | This file — Claude Code reads it every session |
 
@@ -200,3 +204,5 @@ Use Chrome browser testing after any change that affects what the user sees or i
 
 - **2026-05-09** — Created as a generic AI starter template
 - **2026-06-04** — Renamed and repurposed as Market Intelligence Agent; documentation updated to define product vision, learning roadmap, V1 scope, and architecture principles
+- **2026-06-04** — V1 implemented: research form (company, industry, focus) → structured seven-section report via `lib/prompts/marketIntelligencePrompt.js`; AI wrapper made Anthropic-only
+- **2026-06-11** — V1.1 polish: report rendered as styled sections via `components/ReportView.js` (hand-rolled parser, zero new packages); system prompt upgraded with data-honesty rules, focus-weighted depth, and a closing confidence note; shared `lib/focusOptions.js` validates focus on both client and server; clearer loading/error states

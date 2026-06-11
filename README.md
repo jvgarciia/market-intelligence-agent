@@ -8,7 +8,7 @@ Built as a hands-on learning project for a technical + creative marketing intern
 
 ## What It Does
 
-You ask a research question. The agent reasons over it and returns a structured intelligence report — not a chat bubble. The output is designed to be used directly in a deck, brief, or strategy document.
+You enter a company name, optionally an industry, and a research focus. The agent returns a structured seven-section intelligence report — rendered as readable sections with a copy button, not a chat bubble. The report goes deeper on your selected focus, marks unverifiable claims as inferences, and ends with a confidence note telling you what to verify first.
 
 **Example queries:**
 - "Who are the top three competitors to Hulo and what is their brand positioning?"
@@ -47,9 +47,14 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 │   ├── globals.css        # Global styles + Tailwind imports
 │   └── api/chat/route.js  # AI API endpoint (POST /api/chat)
 ├── components/
-│   └── ChatBox.js         # Chat UI component
+│   ├── ResearchForm.js    # Research form + report state
+│   ├── ReportView.js      # Renders the report as styled sections, with copy button
+│   └── ChatBox.js         # Legacy chat UI (kept as reference, not used)
 ├── lib/
-│   └── ai.js              # AI provider wrapper — all AI calls go here
+│   ├── ai.js              # AI wrapper — all AI calls go here
+│   ├── focusOptions.js    # Shared research-focus options (form + API validation)
+│   └── prompts/
+│       └── marketIntelligencePrompt.js  # The analyst system prompt
 ├── .env.example           # Template for environment variables
 ├── .env.local             # Real secrets (never committed)
 ├── project_context.md     # Living project state — Claude Code reads this every session

@@ -1,8 +1,9 @@
 import './globals.css';
 
 export const metadata = {
-  title: process.env.NEXT_PUBLIC_APP_NAME || 'AI Starter App',
-  description: 'Built with the AI Starter Template',
+  title: process.env.NEXT_PUBLIC_APP_NAME || 'Market Intelligence Agent',
+  description:
+    'AI-powered market intelligence — structured company, market, and competitor reports for marketing strategists.',
 };
 
 export default function RootLayout({ children }) {
