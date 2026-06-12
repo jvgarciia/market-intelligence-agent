@@ -40,6 +40,29 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ---
 
+## Development Modes (cost control)
+
+Every report request runs in one of three modes, set with `APP_MODE` in `.env.local`:
+
+| Mode | What it does | API cost | When to use it |
+|------|--------------|----------|----------------|
+| `mock` | Returns a static sample report. **No AI call is made at all.** | Free | UI changes, layout, formatting, copy/export, testing the app flow |
+| `cheap` | Real AI on the cheapest model (Haiku), 1 web search, short report | ~10–20× cheaper than full | Testing real AI behavior, prompt tweaks, search plumbing |
+| `full` | The complete agentic workflow — Sonnet, up to 4 searches, full report | Most expensive | Final tests and portfolio-quality outputs only |
+
+**Defaults when `APP_MODE` is not set:** local development uses `mock` (so day-to-day dev never spends credits by accident); production (Vercel) uses `full` (so the deployed app needs no extra configuration).
+
+```bash
+# .env.local
+APP_MODE=mock    # free UI development (default in dev)
+APP_MODE=cheap   # low-cost real-AI testing
+APP_MODE=full    # the real thing
+```
+
+Restart the dev server after changing `.env.local`. Mock and cheap reports show an amber badge in the report header so they can never be mistaken for real output; the server console also logs the active mode on every request.
+
+---
+
 ## Project Structure
 
 ```

@@ -11,6 +11,7 @@ export default function ResearchForm() {
   const [report, setReport] = useState(null);
   const [sourceCount, setSourceCount] = useState(0);
   const [toolCallCount, setToolCallCount] = useState(0);
+  const [mode, setMode] = useState('full');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -34,6 +35,7 @@ export default function ResearchForm() {
       setReport(data.reply);
       setSourceCount(typeof data.sourceCount === 'number' ? data.sourceCount : 0);
       setToolCallCount(typeof data.toolCallCount === 'number' ? data.toolCallCount : 0);
+      setMode(typeof data.mode === 'string' ? data.mode : 'full');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -65,6 +67,13 @@ export default function ResearchForm() {
                 ? `Grounded in ${sourceCount} live web sources · ${toolCallCount} ${toolCallCount === 1 ? 'search' : 'searches'} run by the agent`
                 : 'Generated from model knowledge — live search unavailable'}
             </p>
+            {mode !== 'full' && (
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-md px-2 py-1 mt-1.5 inline-block">
+                {mode === 'mock'
+                  ? 'MOCK MODE — sample report, no API call was made'
+                  : 'CHEAP MODE — smaller model, 1 search, short report'}
+              </p>
+            )}
           </div>
           <button
             onClick={handleNewReport}

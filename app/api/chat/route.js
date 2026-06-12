@@ -3,11 +3,14 @@ import { chat, chatWithTools } from '@/lib/ai';
 import { MARKET_INTELLIGENCE_SYSTEM_PROMPT } from '@/lib/prompts/marketIntelligencePrompt';
 import { FOCUS_OPTIONS, DEFAULT_FOCUS, MAX_INPUT_LENGTH } from '@/lib/focusOptions';
 import { searchWeb, isSearchConfigured, webSearchTool } from '@/lib/tools/webSearch';
+import { getAppMode, MODE_SETTINGS } from '@/lib/appMode';
+import { buildMockReport } from '@/lib/mockReport';
 
 // The agentic loop can make up to 5 sequential Claude calls plus searches
 export const maxDuration = 180;
 
-const MAX_SEARCHES_PER_REPORT = 4;
+// Keeps the loading state visible in mock mode so the UI flow stays realistic
+const MOCK_RESPONSE_DELAY_MS = 1200;
 
 /**
  * POST /api/chat
@@ -41,11 +44,28 @@ export async function POST(request) {
       return badRequest(`Unknown research focus. Valid options: ${FOCUS_OPTIONS.join(', ')}.`);
     }
 
+    const mode = getAppMode();
+
+    if (mode === 'mock') {
+      console.log('[/api/chat] MOCK_MODE active — returning sample report, no API call made');
+      await new Promise((resolve) => setTimeout(resolve, MOCK_RESPONSE_DELAY_MS));
+      const { reply, sources } = buildMockReport(company, industry, focus);
+      return NextResponse.json({ reply, sourceCount: sources.length, toolCallCount: 0, sources, mode });
+    }
+
+    const settings = MODE_SETTINGS[mode];
+    const systemPrompt = MARKET_INTELLIGENCE_SYSTEM_PROMPT + settings.systemPromptSuffix;
     const messages = [{ role: 'user', content: buildUserMessage(company, industry, focus) }];
 
+    console.log(`[/api/chat] Mode: ${mode} (model: ${settings.model}, max searches: ${settings.maxSearches})`);
+
     if (!isSearchConfigured()) {
-      const reply = await chat(messages, { systemPrompt: MARKET_INTELLIGENCE_SYSTEM_PROMPT });
-      return NextResponse.json({ reply, sourceCount: 0, toolCallCount: 0, sources: [] });
+      const reply = await chat(messages, {
+        systemPrompt,
+        model: settings.model,
+        maxTokens: settings.maxTokens,
+      });
+      return NextResponse.json({ reply, sourceCount: 0, toolCallCount: 0, sources: [], mode });
     }
 
     // The route owns source tracking; the loop in lib/ai.js stays generic
@@ -53,9 +73,11 @@ export async function POST(request) {
     const seenUrls = new Set();
 
     const { text, toolCallCount } = await chatWithTools(messages, {
-      systemPrompt: MARKET_INTELLIGENCE_SYSTEM_PROMPT,
+      systemPrompt,
       tools: [webSearchTool],
-      maxToolCalls: MAX_SEARCHES_PER_REPORT,
+      maxToolCalls: settings.maxSearches,
+      model: settings.model,
+      maxTokens: settings.maxTokens,
       async executeToolCall(name, input) {
         if (name !== 'web_search') throw new Error(`Unknown tool: ${name}`);
         const results = await searchWeb(input.query);
@@ -71,7 +93,7 @@ export async function POST(request) {
 
     console.log(`[/api/chat] Grounded report: ${toolCallCount} searches, ${sources.length} sources`);
 
-    return NextResponse.json({ reply: text, sourceCount: sources.length, toolCallCount, sources });
+    return NextResponse.json({ reply: text, sourceCount: sources.length, toolCallCount, sources, mode });
   } catch (error) {
     console.error('[/api/chat] Error:', error.status || 'no-status', '-', error.message);
     return NextResponse.json({ error: errorMessageFor(error) }, { status: 500 });
