@@ -66,7 +66,7 @@ Claude Code must ask for approval before doing any of the following:
 8. Adding live web search/tool-calling infrastructure.
 9. Introducing a major architecture change.
 10. Running destructive Git commands.
-11. Creating a git commit or pushing to GitHub — unless the conditions in **Automatic Git Workflow** below are met.
+11. Creating a git commit or pushing to GitHub — unless the conditions in **Git Workflow** below are met.
 12. Merging branches or worktrees.
 
 ### After every implementation
@@ -90,43 +90,38 @@ Do not create worktrees or branches automatically. Work directly in the main wor
 
 ---
 
-## Automatic Git Workflow
+## Git Workflow
 
-Claude Code may automatically commit and push changes when all of the following are true:
+Claude should commit and push automatically when a meaningful unit of work is complete and safe.
 
-1. The change is a normal implementation, bug fix, UI update, documentation update, or small refactor.
-2. `npm run lint` passes if available.
-3. The app builds or starts successfully when relevant.
-4. `git status` has been reviewed.
-5. No secret files are staged, especially:
-   - `.env`
-   - `.env.local`
-   - any file containing API keys or tokens
-6. The commit message is clear and describes the actual change.
-7. The change does not involve protected actions.
+A meaningful unit of work means:
+- a feature is implemented
+- a bug is fixed
+- documentation is updated
+- a refactor is completed
+- a verified checkpoint is reached
 
-Claude Code must still ask before committing or pushing when the change involves:
+Before committing, Claude must:
+- run git status
+- review changed files
+- confirm no .env.local or secrets are staged
+- run relevant checks when appropriate
+- use a clear commit message
 
-- installing/removing/upgrading packages
-- deleting files
-- changing environment variables
-- changing deployment settings
-- authentication
-- database
-- RAG/vector database infrastructure
-- live web search/tool-calling infrastructure
-- major architecture changes
-- destructive git commands
-- merging branches
+Claude should not commit:
+- broken code
+- half-finished work
+- random experiments
+- secrets or local config
+- changes the user did not ask for
 
-Default behavior:
-For safe normal changes, Claude Code should:
-
-1. implement the requested change
-2. run checks
-3. commit with a clear message
-4. push to GitHub
-5. summarize what changed, what was checked, and the final Git status
+Claude must still ask before:
+- force push
+- rebase
+- reset --hard
+- deleting many files
+- installing packages
+- changing deployment/auth/database/payment settings
 
 ---
 
