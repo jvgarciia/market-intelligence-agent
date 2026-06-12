@@ -94,6 +94,9 @@ function errorMessageFor(error) {
   if (error.status === 401) {
     return 'The AI service rejected the server credentials. Check ANTHROPIC_API_KEY in .env.local and restart the dev server.';
   }
+  if (/credit balance/i.test(error.message || '')) {
+    return 'The Anthropic account is out of API credits. Add credits at console.anthropic.com under Plans & Billing, then try again.';
+  }
   if (error.status === 429 || error.status === 529) {
     return 'The AI service is busy right now. Wait a moment and try again.';
   }
