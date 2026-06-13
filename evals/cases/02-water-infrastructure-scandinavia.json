@@ -1,0 +1,29 @@
+{
+  "id": "02-water-infrastructure-scandinavia",
+  "title": "Water infrastructure opportunities in Scandinavia",
+  "category": "Multi-country region — infrastructure investment signals",
+  "input": {
+    "targetMarket": "Scandinavia (Sweden, Norway, Denmark)",
+    "targetCustomerType": "infrastructure operators and municipal water organisations",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Identify where infrastructure investment or modernisation creates timing for new technology",
+    "constraints": ["focus on public or regulated operators"]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "Infrastructure-investment and digitalisation signals should dominate over pure regulation",
+      "Should distinguish the three countries rather than treating 'Scandinavia' as one market",
+      "Commercial-timing signals (budget cycles, modernisation programmes) are especially valuable here"
+    ],
+    "candidates": [
+      "Operators should be tagged with the correct country in location",
+      "A mix of municipal and larger infrastructure operators is expected"
+    ],
+    "mustAvoid": [
+      "Collapsing distinct national markets into one undifferentiated list",
+      "Assuming uniform regulation across the three countries"
+    ],
+    "sourceExpectations": "National infrastructure agencies and municipal procurement portals are high value"
+  },
+  "notes": "Tests whether the system handles a multi-country region without losing per-country specificity."
+}

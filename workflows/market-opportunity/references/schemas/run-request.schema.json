@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/run-request",
+  "title": "Run Request",
+  "description": "The validated inputs that start one Market Opportunity run. Contains no secrets.",
+  "type": "object",
+  "required": ["runId", "targetMarket", "targetCustomerType", "solutionDescription", "businessObjective", "mode", "createdAt"],
+  "properties": {
+    "runId": { "type": "string" },
+    "targetMarket": { "type": "string", "description": "Market or region, e.g. 'Spain'." },
+    "targetCustomerType": { "type": "string", "description": "e.g. 'water utilities'." },
+    "solutionDescription": { "type": "string", "description": "What the company offers. Keep generic, no confidential data." },
+    "businessObjective": { "type": "string", "description": "What a good result enables." },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Optional, e.g. 'EU only', 'public-sector only'."
+    },
+    "mode": { "type": "string", "enum": ["mock", "cheap", "full"] },
+    "createdAt": { "type": "string" }
+  }
+}

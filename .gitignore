@@ -30,6 +30,13 @@ yarn-error.log*
 dist/
 build/
 
+# ─── Workflow run artifacts (keep the folder + its README only) ──
+/runs/*
+!/runs/README.md
+
+# ─── Word lock/temp files ───────────────────────────────────
+~$*.docx
+
 # ─── Claude Code ────────────────────────────────────────────
 .claude/settings.local.json
 .claude/worktrees/

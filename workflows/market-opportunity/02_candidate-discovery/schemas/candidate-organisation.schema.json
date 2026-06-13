@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/candidate-organisation",
+  "title": "Candidate Organisation",
+  "description": "A potential customer or market actor. Stage 02 output. Must carry relevance evidence.",
+  "type": "object",
+  "required": ["candidateId", "name", "organisationType", "location", "relevanceEvidence", "confidence", "metadata"],
+  "properties": {
+    "candidateId": { "type": "string" },
+    "name": { "type": "string" },
+    "organisationType": {
+      "type": "string",
+      "enum": ["water-utility", "drinking-water-company", "infrastructure-operator", "municipality", "public-water-organisation", "regulator", "competitor", "other"]
+    },
+    "location": {
+      "type": "object",
+      "required": ["country"],
+      "properties": {
+        "country": { "type": "string" },
+        "region": { "type": "string" }
+      }
+    },
+    "relevanceEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["claim"],
+        "properties": {
+          "claim": { "type": "string" },
+          "signalIds": { "type": "array", "items": { "type": "string" } },
+          "sourceIds": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "uncertainty": { "type": "string" },
+    "metadata": {
+      "type": "object",
+      "required": ["runId", "stage", "createdAt"],
+      "properties": {
+        "runId": { "type": "string" },
+        "stage": { "type": "string", "enum": ["candidate-discovery"] },
+        "createdAt": { "type": "string" }
+      }
+    }
+  }
+}

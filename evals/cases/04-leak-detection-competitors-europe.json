@@ -1,0 +1,28 @@
+{
+  "id": "04-leak-detection-competitors-europe",
+  "title": "AI leak-detection competitors in Europe",
+  "category": "Competitor landscape — not customer discovery",
+  "input": {
+    "targetMarket": "Europe",
+    "targetCustomerType": "competing vendors (for landscape mapping, not as customers)",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Map the competitive landscape to sharpen positioning and messaging",
+    "constraints": ["companies selling to water utilities", "exclude pure hardware with no software"]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "competitor-development should be the dominant signalType",
+      "Should capture each competitor's apparent positioning, not just its name"
+    ],
+    "candidates": [
+      "organisationType should be 'competitor' here, not a utility type",
+      "Each competitor needs relevance evidence (what they sell, to whom)"
+    ],
+    "mustAvoid": [
+      "Treating competitors as sales targets / suggesting outreach to them",
+      "Listing companies with no verifiable software offering"
+    ],
+    "sourceExpectations": "Company websites and analyst/trade coverage; flag marketing claims as interpretation, not fact"
+  },
+  "notes": "Tests that the same machinery serves a positioning goal, and that fact-vs-interpretation stays clean when sources are vendor self-description."
+}

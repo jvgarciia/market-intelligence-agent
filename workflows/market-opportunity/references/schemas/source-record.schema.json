@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/source-record",
+  "title": "Source Record",
+  "description": "A single source that evidence can cite. Created in Stage 01, referenced by sourceId everywhere else.",
+  "type": "object",
+  "required": ["sourceId", "url", "title", "retrievedAt", "sourceType"],
+  "properties": {
+    "sourceId": { "type": "string", "description": "Stable id, e.g. 'src-1'." },
+    "url": { "type": "string", "description": "The exact URL a tool returned. Never invented." },
+    "title": { "type": "string" },
+    "publisher": { "type": "string" },
+    "publicationDate": {
+      "type": ["string", "null"],
+      "description": "ISO date if known, else null. Used for recency checks."
+    },
+    "retrievedAt": { "type": "string", "description": "ISO timestamp the source was fetched." },
+    "sourceType": {
+      "type": "string",
+      "enum": ["regulation", "funding", "tender", "news", "company-website", "report", "dataset", "other"]
+    },
+    "qualityTier": {
+      "type": "string",
+      "enum": ["A", "B", "C"],
+      "description": "Per references/evidence-standards.md. A = authoritative, C = weak/promotional."
+    }
+  }
+}

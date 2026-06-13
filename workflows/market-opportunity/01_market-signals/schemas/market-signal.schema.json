@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/market-signal",
+  "title": "Market Signal",
+  "description": "One sourced claim about the market. Stage 01 output. One claim per signal.",
+  "type": "object",
+  "required": ["signalId", "claim", "signalType", "relevance", "confidence", "sourceIds", "metadata"],
+  "properties": {
+    "signalId": { "type": "string" },
+    "claim": { "type": "string", "description": "A single factual statement, not a bundle." },
+    "signalType": {
+      "type": "string",
+      "enum": ["regulation", "funding", "infrastructure-investment", "market-problem", "digitalisation", "tender", "technology-adoption", "competitor-development"]
+    },
+    "relevance": { "type": "string", "enum": ["high", "medium", "low"] },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "uncertainty": { "type": "string", "description": "What is unclear or unverified about this claim." },
+    "sourceIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Must reference source-records in 00-sources.json. No empty arrays."
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["runId", "stage", "createdAt"],
+      "properties": {
+        "runId": { "type": "string" },
+        "stage": { "type": "string", "enum": ["market-signals"] },
+        "createdAt": { "type": "string" }
+      }
+    }
+  }
+}

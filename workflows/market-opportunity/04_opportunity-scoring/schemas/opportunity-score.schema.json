@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/opportunity-score",
+  "title": "Opportunity Score",
+  "description": "An explainable score for one candidate against the six dimensions in references/scoring-rubric.md. Stage 04 output.",
+  "type": "object",
+  "required": ["candidateId", "dimensions", "totalScore", "rationale", "metadata"],
+  "properties": {
+    "candidateId": { "type": "string" },
+    "dimensions": {
+      "type": "object",
+      "required": ["problemUrgency", "solutionFit", "commercialTiming", "evidenceStrength", "marketAccessibility", "strategicRelevance"],
+      "properties": {
+        "problemUrgency": { "$comment": "see scoredDimension shape", "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "solutionFit": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "commercialTiming": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "evidenceStrength": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "marketAccessibility": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "strategicRelevance": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } }
+      }
+    },
+    "totalScore": { "type": "integer", "minimum": 0, "maximum": 30, "description": "Sum of the six dimension scores. Verified by the orchestrator." },
+    "rationale": { "type": "string" },
+    "metadata": {
+      "type": "object",
+      "required": ["runId", "stage", "createdAt"],
+      "properties": {
+        "runId": { "type": "string" },
+        "stage": { "type": "string", "enum": ["opportunity-scoring"] },
+        "createdAt": { "type": "string" }
+      }
+    }
+  }
+}

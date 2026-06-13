@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/run-metadata",
+  "title": "Run Metadata",
+  "description": "Run-level state written to metadata.json, including human review-gate status.",
+  "type": "object",
+  "required": ["runId", "workflow", "mode", "createdAt", "stagesCompleted", "schemaVersion", "reviewGates"],
+  "properties": {
+    "runId": { "type": "string" },
+    "workflow": { "type": "string", "const": "market-opportunity" },
+    "mode": { "type": "string", "enum": ["mock", "cheap", "full"] },
+    "createdAt": { "type": "string" },
+    "completedAt": { "type": ["string", "null"] },
+    "stagesCompleted": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["market-signals", "candidate-discovery", "evidence-validation", "opportunity-scoring", "opportunity-brief"]
+      }
+    },
+    "schemaVersion": { "type": "string" },
+    "reviewGates": {
+      "type": "object",
+      "required": ["gate1", "gate2"],
+      "properties": {
+        "gate1": { "type": "string", "enum": ["pending", "approved", "changes-requested"] },
+        "gate2": { "type": "string", "enum": ["pending", "approved", "changes-requested"] }
+      }
+    }
+  }
+}

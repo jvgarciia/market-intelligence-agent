@@ -1,0 +1,29 @@
+{
+  "id": "05-water-funding-tenders",
+  "title": "Public funding and tenders for water-network optimisation",
+  "category": "Signal-type focus — funding and tenders as the lead",
+  "input": {
+    "targetMarket": "European Union",
+    "targetCustomerType": "public water organisations and infrastructure operators",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Find live funding programmes and tenders that create a near-term reason to engage a market",
+    "constraints": ["only active or recently opened programmes", "must be publicly verifiable"]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "funding and tender signalTypes should lead",
+      "Every funding/tender claim MUST have a publication date and pass the recency threshold",
+      "commercialTiming is the decisive scoring dimension for candidates tied to these"
+    ],
+    "candidates": [
+      "Organisations should be linked to a specific programme or tender via evidence",
+      "Recency is critical — outdated programmes should be rejected in validation, with reason 'outdated'"
+    ],
+    "mustAvoid": [
+      "Citing expired programmes as if current",
+      "Funding claims with no date or no source"
+    ],
+    "sourceExpectations": "Official EU/national funding portals and tender platforms (Tier A); reject undated aggregators"
+  },
+  "notes": "Hardest case for recency and citation discipline — exactly where the staged validation stage should beat the baseline."
+}

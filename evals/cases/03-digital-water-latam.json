@@ -1,0 +1,29 @@
+{
+  "id": "03-digital-water-latam",
+  "title": "Digital water transformation in Latin America",
+  "category": "Emerging region — thinner, less recent sources",
+  "input": {
+    "targetMarket": "Latin America (with emphasis on larger urban utilities)",
+    "targetCustomerType": "urban water utilities and public water organisations",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Assess whether digital-water adoption is mature enough to be worth pursuing, and where",
+    "constraints": ["prioritise large metropolitan utilities", "note language/region accessibility"]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "Digitalisation and technology-adoption signals are central",
+      "Should honestly flag where evidence is thin or dated rather than overstating maturity",
+      "Funding from development banks is a plausible, valuable signal type"
+    ],
+    "candidates": [
+      "Large metropolitan utilities are more discoverable than small ones — expect a short, honest list",
+      "marketAccessibility scoring should reflect language and procurement-transparency realities"
+    ],
+    "mustAvoid": [
+      "Overstating adoption maturity to make the market look better than it is",
+      "Padding the candidate list with unverifiable organisations"
+    ],
+    "sourceExpectations": "Development-bank reports and national utility sites; be cautious with undated pages"
+  },
+  "notes": "Stress-tests honesty and uncertainty handling where sources are weaker — a key accuracy risk."
+}

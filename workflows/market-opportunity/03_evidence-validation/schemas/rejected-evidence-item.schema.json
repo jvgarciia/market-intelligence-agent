@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/rejected-evidence-item",
+  "title": "Rejected Evidence Item",
+  "description": "A claim that failed validation, with the reason. Stage 03 output. Nothing is dropped silently.",
+  "type": "object",
+  "required": ["evidenceId", "claim", "rejectionReason", "metadata"],
+  "properties": {
+    "evidenceId": { "type": "string" },
+    "claim": { "type": "string" },
+    "rejectionReason": {
+      "type": "string",
+      "enum": ["duplicate", "weak-evidence", "outdated", "unsupported-assumption", "off-topic", "unverifiable-source"]
+    },
+    "notes": { "type": "string" },
+    "metadata": {
+      "type": "object",
+      "required": ["runId", "stage", "createdAt"],
+      "properties": {
+        "runId": { "type": "string" },
+        "stage": { "type": "string", "enum": ["evidence-validation"] },
+        "createdAt": { "type": "string" }
+      }
+    }
+  }
+}

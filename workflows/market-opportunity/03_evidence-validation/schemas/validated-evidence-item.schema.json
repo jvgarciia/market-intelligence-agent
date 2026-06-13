@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "market-opportunity/validated-evidence-item",
+  "title": "Validated Evidence Item",
+  "description": "A claim that passed the keep rules in references/evidence-standards.md. Stage 03 output.",
+  "type": "object",
+  "required": ["evidenceId", "claim", "validationStatus", "supportingSourceIds", "recencyOk", "confidence", "metadata"],
+  "properties": {
+    "evidenceId": { "type": "string" },
+    "claim": { "type": "string" },
+    "validationStatus": { "type": "string", "const": "validated" },
+    "supportingSourceIds": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "recencyOk": { "type": "boolean", "description": "False = kept but flagged for age; see evidence-standards.md." },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "metadata": {
+      "type": "object",
+      "required": ["runId", "stage", "createdAt"],
+      "properties": {
+        "runId": { "type": "string" },
+        "stage": { "type": "string", "enum": ["evidence-validation"] },
+        "createdAt": { "type": "string" }
+      }
+    }
+  }
+}

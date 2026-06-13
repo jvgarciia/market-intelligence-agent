@@ -1,0 +1,31 @@
+{
+  "id": "01-water-utilities-spain",
+  "title": "Water utilities in Spain",
+  "category": "Single national market — customer discovery",
+  "input": {
+    "targetMarket": "Spain",
+    "targetCustomerType": "water utilities and drinking-water companies",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Shortlist Spanish utilities worth researching for outbound marketing",
+    "constraints": ["EU regulatory context", "organisations operating public water networks"]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "Should surface water-loss / non-revenue-water as a real problem area",
+      "Should look for EU or national regulation and any funding for network efficiency",
+      "Signals must each carry a source and a date where a date is expected"
+    ],
+    "candidates": [
+      "Real, identifiable Spanish water operators (regional or municipal)",
+      "organisationType should be from the allowed enum (water-utility, municipality, etc.)",
+      "Each candidate must carry relevance evidence, not just a name"
+    ],
+    "mustAvoid": [
+      "Inventing utilities that cannot be sourced",
+      "Confusing bottled-water brands with network/utility operators",
+      "Any outreach or contact instruction in recommendations"
+    ],
+    "sourceExpectations": "Prefer Tier A/B (regulators, official portals, trade press) over promotional vendor pages"
+  },
+  "notes": "Strongest, most concrete case — a well-defined market with public regulators and operators."
+}

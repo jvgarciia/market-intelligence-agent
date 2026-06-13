@@ -67,6 +67,37 @@ Restart the dev server after changing `.env.local`. Mock and cheap reports show 
 
 ---
 
+## Where this is going — B2B Market Opportunity workflow
+
+The product is evolving from a single company-report generator into a **B2B Market
+Opportunity & Account Intelligence System**: research a market, detect commercial
+signals, discover candidate organisations, validate and rank them, and produce
+evidence-based briefs — with a human in control at two review gates.
+
+This is being built **baseline-first**, not as a swarm of agents:
+
+1. The current single-report flow is the **measured baseline** (unchanged).
+2. A new **staged workflow** breaks the job into five inspectable stages with
+   schema-validated artifacts (`workflows/market-opportunity/`). It currently
+   runs in **mock mode only** (free, deterministic) so the structure can be built
+   and tested without spending credits.
+3. **Evaluations** (`evals/`) define what "better" means. Live stages — and any
+   future multi-agent version — must beat the baseline on these before they ship.
+
+The design is inspired by the **Interpretable Context Methodology**: one stage =
+one responsibility, stage-specific context, a hard split between stable
+**reference** material and run-specific **working artifacts**, and inspectable
+intermediate outputs at every step.
+
+```bash
+npm run workflow:demo   # run one mock Market Opportunity run → writes runs/<id>/
+npm test                # validate schemas, run store, and a full mock pipeline
+```
+
+See `workflows/market-opportunity/CONTEXT.md` for the workflow contract,
+`docs/architecture/current-state-audit.md` for why this approach, and
+`evals/README.md` for the measurement plan.
+
 ## Project Structure
 
 ```
@@ -74,16 +105,33 @@ Restart the dev server after changing `.env.local`. Mock and cheap reports show 
 │   ├── layout.js          # HTML shell — wraps every page
 │   ├── page.js            # Homepage
 │   ├── globals.css        # Global styles + Tailwind imports
-│   └── api/chat/route.js  # AI API endpoint (POST /api/chat)
+│   └── api/
+│       ├── chat/route.js  # AI API endpoint (POST /api/chat) — the baseline
+│       └── mode/route.js  # GET /api/mode — exposes active cost mode safely
 ├── components/
 │   ├── ResearchForm.js    # Research form + report state
 │   ├── ReportView.js      # Renders the report as styled sections, with copy button
 │   └── ChatBox.js         # Legacy chat UI (kept as reference, not used)
 ├── lib/
 │   ├── ai.js              # AI wrapper — all AI calls go here
+│   ├── appMode.js         # mock/cheap/full cost control
+│   ├── mockReport.js      # Static sample report for mock mode
 │   ├── focusOptions.js    # Shared research-focus options (form + API validation)
-│   └── prompts/
-│       └── marketIntelligencePrompt.js  # The analyst system prompt
+│   ├── tools/webSearch.js # Tavily web-search tool (schema + executor)
+│   ├── prompts/
+│   │   └── marketIntelligencePrompt.js  # The analyst system prompt
+│   └── workflow/          # Staged Market Opportunity engine (mock-only for now)
+│       ├── validate.mjs   # Tiny dependency-free JSON-Schema validator
+│       ├── schemas.mjs    # Loads + validates artifacts against stage schemas
+│       ├── runStore.mjs   # Per-run artifact storage (swappable for a DB later)
+│       ├── mockPipeline.mjs  # Deterministic free fixtures for all five stages
+│       └── runWorkflow.mjs   # Orchestrator: run stages, validate, persist
+├── workflows/market-opportunity/   # ICM-style stage contracts, schemas, references
+├── evals/                 # Evaluation dimensions + realistic test cases
+├── docs/architecture/     # current-state-audit.md
+├── runs/                  # Local run artifacts (git-ignored except README)
+├── scripts/run-workflow-demo.mjs   # `npm run workflow:demo`
+├── tests/                 # node:test suites (no test framework dependency)
 ├── .env.example           # Template for environment variables
 ├── .env.local             # Real secrets (never committed)
 ├── project_context.md     # Living project state — Claude Code reads this every session
@@ -117,6 +165,8 @@ Restart the dev server after changing `.env.local`. Mock and cheap reports show 
 | `npm run build` | Build for production |
 | `npm run start` | Run the production build locally |
 | `npm run lint` | Check for code issues |
+| `npm test` | Run the workflow schema/store/pipeline tests (Node built-in runner) |
+| `npm run workflow:demo` | Run one mock Market Opportunity workflow (free) and print artifact paths |
 
 ---
 
