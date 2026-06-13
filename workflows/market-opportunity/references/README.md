@@ -6,8 +6,10 @@ that are stable across every run. ICM separates this from **working artifacts**
 
 **The rule:** nothing in here changes because of a single run. If a run reveals
 that a rule is wrong (e.g. the recency threshold is too strict), you update the
-reference file deliberately — that is "source-level improvement based on repeated
-feedback." Run outputs never get written here.
+reference file deliberately. This is the *manual* form of the ICM "edit the source,
+not the output" argument (paper §6.3) — the paper treats the *automated* version
+(detecting recurring edits and suggesting source changes) as future work, not a
+shipped feature. Run outputs never get written here.
 
 ## Contents
 

@@ -4,12 +4,14 @@
 **Scope:** The Market Intelligence Agent as it exists on branch `main` at commit `f8b0072`.
 **Method:** Read every source file listed below. No findings are inferred beyond the code; where a fact could not be verified it is marked as such.
 
-> Note on the ICM papers: the task referenced two PDFs (`2603.16021.pdf` and
-> `Interpretable Context Methodology_ Folder Structure as Agent Architecture.pdf`).
-> **Neither file exists in this repository** (searched the full tree, excluding
-> `node_modules`/`.next`). This audit therefore applies the ICM principles as
-> enumerated in the task brief, not as quoted from the papers. If the PDFs are
-> added later, the staged design in `workflows/` should be re-checked against them.
+> Note on the ICM paper: when this audit was first written the ICM paper was not
+> in the repository, so it applied the ICM principles as enumerated in the task
+> brief. The paper has since been added at
+> `docs/research/Interpretable Context Methodology_ Folder Structure as Agent Architecture.pdf`
+> and the staged design has been reviewed against it directly. See
+> [icm-adoption-review.md](icm-adoption-review.md) for that review — including
+> which principles were adopted, adapted, or postponed, and the paper's own
+> stated limitations.
 
 Files inspected: `CLAUDE.md`, `AGENTS.md`, `README.md`, `project_context.md`,
 `package.json`, `app/page.js` (composition), `app/api/chat/route.js`,
