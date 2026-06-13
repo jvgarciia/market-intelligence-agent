@@ -50,16 +50,20 @@ Every report request runs in one of three modes, set with `APP_MODE` in `.env.lo
 | `cheap` | Real AI on the cheapest model (Haiku), 1 web search, short report | ~10–20× cheaper than full | Testing real AI behavior, prompt tweaks, search plumbing |
 | `full` | The complete agentic workflow — Sonnet, up to 4 searches, full report | Most expensive | Final tests and portfolio-quality outputs only |
 
-**Defaults when `APP_MODE` is not set:** local development uses `mock` (so day-to-day dev never spends credits by accident); production (Vercel) uses `full` (so the deployed app needs no extra configuration).
+**Defaults when `APP_MODE` is not set:**
+- Local dev → `mock` (no API calls, no accidental spend)
+- Production → `cheap` (safe fallback — never silently runs the expensive full workflow)
+
+**To use full mode in production you must set `APP_MODE=full` explicitly** in the Vercel dashboard under Settings → Environment Variables. A missing or typo'd value will never trigger the most expensive path.
 
 ```bash
 # .env.local
 APP_MODE=mock    # free UI development (default in dev)
 APP_MODE=cheap   # low-cost real-AI testing
-APP_MODE=full    # the real thing
+APP_MODE=full    # the real thing (requires explicit config everywhere)
 ```
 
-Restart the dev server after changing `.env.local`. Mock and cheap reports show an amber badge in the report header so they can never be mistaken for real output; the server console also logs the active mode on every request.
+Restart the dev server after changing `.env.local`. Mock and cheap reports show an amber badge; full reports show a green badge. A subtle mode indicator also appears on the form before you click Generate, so you always know what you're about to run.
 
 ---
 

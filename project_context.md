@@ -40,7 +40,7 @@ Each phase of this project is designed to teach a specific AI engineering concep
 | 9 | Evaluation systems | Automated quality scoring for agent outputs |
 | 10 | Human-out-of-the-loop | Scheduled, automated intelligence delivery |
 
-**Current phase:** Phase 3 — Tool calling. V2.1 complete: Claude runs a real agentic tool-use loop, deciding what to search (max 4 searches) before writing the report. Next: Phase 4 (structured outputs) or V2.2/V2.3 (source display, citation verification).
+**Current phase:** Phase 3 — Tool calling. V2.1 complete: Claude runs a real agentic tool-use loop, deciding what to search (max 4 searches) before writing the report. V2.2 complete: safety hardening on APP_MODE defaults. Next: Phase 4 (structured outputs) or V2.3 (source display, citation verification).
 
 ---
 
@@ -189,6 +189,7 @@ Use Chrome browser testing after any change that affects what the user sees or i
 | `app/layout.js` | HTML shell — fonts, metadata, global styles |
 | `app/page.js` | Homepage — composes the main UI |
 | `app/api/chat/route.js` | AI backend endpoint — validates `{ company, industry, focus }`, calls AI, returns report |
+| `app/api/mode/route.js` | Safe mode endpoint — returns `{ mode }` (current APP_MODE value) without exposing the env var to the browser |
 | `lib/ai.js` | AI wrapper (Anthropic-only) — `chat()` for single calls, `chatWithTools()` for the generic agentic loop; only place where AI SDKs are imported; exports `MODELS` (full = Sonnet, cheap = Haiku) |
 | `lib/appMode.js` | Cost-control mode switch — resolves `APP_MODE` env var (`mock` / `cheap` / `full`) and per-mode settings (model, max tokens, max searches); defaults to mock in dev, full in production |
 | `lib/mockReport.js` | Static sample report for mock mode — same structure as real output so the UI renders it identically; zero API cost |
@@ -213,3 +214,4 @@ Use Chrome browser testing after any change that affects what the user sees or i
 - **2026-06-11** — V2.1 agentic tool calling: `chatWithTools()` added to `lib/ai.js` — a generic tool-use loop (model requests tool → route executes → result returned → repeat until plain-text answer, hard-capped at 4 tool calls + runaway round limit). Claude now composes its own search queries instead of the fixed three; failed searches return `is_error` tool results and the model continues gracefully. Route tracks sources via closure and returns `{ reply, sourceCount, toolCallCount, sources }`; UI badge shows search count. System prompt caching enabled across loop rounds
 - **2026-06-12** — Billing errors surfaced clearly: the API route maps Anthropic "credit balance too low" failures to an actionable error message instead of the generic fallback
 - **2026-06-12** — Cost-control modes: one `APP_MODE` env var with three values — `mock` (static sample report from `lib/mockReport.js`, zero API calls, default in local dev), `cheap` (Haiku model, 1 search, 1.5K max tokens, brief report), `full` (unchanged complete agentic workflow, default in production). Mode resolution lives in `lib/appMode.js`; the route branches once at the top; `chat()`/`chatWithTools()` accept `model`/`maxTokens` options. UI shows an amber badge on mock/cheap reports; server logs the active mode per request. Documented in README and `.env.example`
+- **2026-06-13** — Safety hardening on APP_MODE: production default changed from `full` → `cheap` with a `console.warn`; full mode now requires `APP_MODE=full` set explicitly everywhere. Added `GET /api/mode` route (`app/api/mode/route.js`) so the UI can safely display the active mode without exposing `APP_MODE` as a `NEXT_PUBLIC_` variable. `ResearchForm.js` now fetches active mode on mount and shows a pre-generation indicator; post-report badges corrected (cheap badge says "reduced-cost real AI report", full mode gets its own green badge).

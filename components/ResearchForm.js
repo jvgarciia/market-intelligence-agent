@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FOCUS_OPTIONS, DEFAULT_FOCUS, MAX_INPUT_LENGTH } from '@/lib/focusOptions';
 import ReportView from '@/components/ReportView';
 
@@ -12,8 +12,16 @@ export default function ResearchForm() {
   const [sourceCount, setSourceCount] = useState(0);
   const [toolCallCount, setToolCallCount] = useState(0);
   const [mode, setMode] = useState('full');
+  const [activeMode, setActiveMode] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/mode')
+      .then((r) => r.json())
+      .then((d) => setActiveMode(d.mode))
+      .catch(() => {});
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -67,11 +75,19 @@ export default function ResearchForm() {
                 ? `Grounded in ${sourceCount} live web sources · ${toolCallCount} ${toolCallCount === 1 ? 'search' : 'searches'} run by the agent`
                 : 'Generated from model knowledge — live search unavailable'}
             </p>
-            {mode !== 'full' && (
+            {mode === 'mock' && (
               <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-md px-2 py-1 mt-1.5 inline-block">
-                {mode === 'mock'
-                  ? 'MOCK MODE — sample report, no API call was made'
-                  : 'CHEAP MODE — smaller model, 1 search, short report'}
+                MOCK MODE — sample report, no API call was made
+              </p>
+            )}
+            {mode === 'cheap' && (
+              <p className="text-xs text-amber-700 bg-amber-50 border border-amber-100 rounded-md px-2 py-1 mt-1.5 inline-block">
+                CHEAP MODE — reduced-cost real AI report
+              </p>
+            )}
+            {mode === 'full' && (
+              <p className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-md px-2 py-1 mt-1.5 inline-block">
+                FULL MODE — complete AI research workflow
               </p>
             )}
           </div>
@@ -160,10 +176,27 @@ export default function ResearchForm() {
         </div>
       )}
 
+      {activeMode && !isLoading && (
+        <p className="text-xs text-gray-400">
+          Active mode:{' '}
+          <span className={
+            activeMode === 'mock' ? 'text-amber-600 font-medium' :
+            activeMode === 'cheap' ? 'text-amber-600 font-medium' :
+            'text-gray-500'
+          }>
+            {activeMode === 'mock' && 'mock (free — no API call)'}
+            {activeMode === 'cheap' && 'cheap (real AI, reduced cost)'}
+            {activeMode === 'full' && 'full (complete agentic workflow)'}
+          </span>
+        </p>
+      )}
+
       {isLoading && (
         <div className="flex items-center gap-3 text-sm text-gray-500 bg-gray-50 rounded-xl px-4 py-3">
           <span className="h-2 w-2 rounded-full bg-gray-400 animate-pulse" />
-          Searching the web for {company.trim()}, then writing the report — about 90 seconds.
+          {activeMode === 'mock'
+            ? `Building sample report for ${company.trim()}…`
+            : `Searching the web for ${company.trim()}, then writing the report — about 90 seconds.`}
         </div>
       )}
 
