@@ -91,12 +91,16 @@ intermediate outputs at every step.
 
 ```bash
 npm run workflow:demo   # run one mock Market Opportunity run → writes runs/<id>/
-npm test                # validate schemas, run store, and a full mock pipeline
+npm test                # validate schemas, run store, mock pipeline, and eval harness (55 tests)
+npm run eval:mock       # run all 5 eval cases through both adapters (zero cost)
+npm run eval:review -- --run <evalRunId>  # score an eval run against the human rubric
+npm run eval:live -- --help               # live evaluation (requires approval + shows cost estimate)
 ```
 
 See `workflows/market-opportunity/CONTEXT.md` for the workflow contract,
 `docs/architecture/current-state-audit.md` for why this approach, and
-`evals/README.md` for the measurement plan.
+`evals/README.md` for the measurement plan including what mock runs prove and
+what still requires a live comparison.
 
 ## Project Structure
 
@@ -127,7 +131,10 @@ See `workflows/market-opportunity/CONTEXT.md` for the workflow contract,
 │       ├── mockPipeline.mjs  # Deterministic free fixtures for all five stages
 │       └── runWorkflow.mjs   # Orchestrator: run stages, validate, persist
 ├── workflows/market-opportunity/   # ICM-style stage contracts, schemas, references
-├── evals/                 # Evaluation dimensions + realistic test cases
+├── evals/
+│   ├── cases/             # 5 realistic test case definitions
+│   ├── results/           # Eval run outputs (git-ignored; .gitkeep keeps the folder)
+│   └── harness/           # adapters, normalizers, deterministic checks, rubric, runner
 ├── docs/architecture/     # current-state-audit.md
 ├── runs/                  # Local run artifacts (git-ignored except README)
 ├── scripts/run-workflow-demo.mjs   # `npm run workflow:demo`
@@ -165,8 +172,11 @@ See `workflows/market-opportunity/CONTEXT.md` for the workflow contract,
 | `npm run build` | Build for production |
 | `npm run start` | Run the production build locally |
 | `npm run lint` | Check for code issues |
-| `npm test` | Run the workflow schema/store/pipeline tests (Node built-in runner) |
+| `npm test` | Run all 55 tests — schemas, store, pipeline, eval harness (Node built-in runner) |
 | `npm run workflow:demo` | Run one mock Market Opportunity workflow (free) and print artifact paths |
+| `npm run eval:mock` | Run all 5 eval cases through baseline + staged adapters (zero API cost) |
+| `npm run eval:review` | Enter human reviewer scores for an eval run against the rubric |
+| `npm run eval:live` | Live evaluation with real API calls (shows cost estimate, requires confirmation) |
 
 ---
 
