@@ -9,8 +9,11 @@
     "lint": "next lint",
     "test": "node --test \"tests/**/*.test.mjs\"",
     "workflow:demo": "node scripts/run-workflow-demo.mjs",
+    "workflow:local": "node scripts/run-workflow-local.mjs",
+    "workflow:review": "node scripts/review-run.mjs",
     "eval:mock": "node scripts/run-eval.mjs",
     "eval:live": "node scripts/run-eval-live.mjs",
+    "eval:local-stage01": "node scripts/run-eval-local-stage01.mjs",
     "eval:review": "node evals/harness/rubric/review-cli.mjs"
   },
   "dependencies": {

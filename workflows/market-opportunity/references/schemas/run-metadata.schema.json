@@ -8,7 +8,7 @@
   "properties": {
     "runId": { "type": "string" },
     "workflow": { "type": "string", "const": "market-opportunity" },
-    "mode": { "type": "string", "enum": ["mock", "cheap", "full"] },
+    "mode": { "type": "string", "enum": ["mock", "cheap", "full", "local-cli"] },
     "createdAt": { "type": "string" },
     "completedAt": { "type": ["string", "null"] },
     "stagesCompleted": {

@@ -16,7 +16,7 @@
       "items": { "type": "string" },
       "description": "Optional, e.g. 'EU only', 'public-sector only'."
     },
-    "mode": { "type": "string", "enum": ["mock", "cheap", "full"] },
+    "mode": { "type": "string", "enum": ["mock", "cheap", "full", "local-cli"] },
     "createdAt": { "type": "string" }
   }
 }
