@@ -494,3 +494,167 @@ test('local-cli mode is never activated by the existing runWorkflow (mock-only)'
     /only implemented for mock/i
   );
 });
+
+// ─── generate: CLI argument contract ─────────────────────────────────────────
+
+// Helper: captures the args array passed to spawnFn
+function captureSpawnFn(overrides = {}) {
+  let capturedArgs = null;
+  const fn = (_path, args) => {
+    capturedArgs = args;
+    return {
+      status: 0,
+      stdout: JSON.stringify({ sources: [VALID_SOURCE], signals: [VALID_SIGNAL()] }),
+      stderr: '',
+      error: null,
+      ...overrides,
+    };
+  };
+  fn.getArgs = () => capturedArgs;
+  return fn;
+}
+
+// Returns the value of a flag (the element immediately after it), or null.
+function flagValue(args, flag) {
+  const idx = args.indexOf(flag);
+  return idx !== -1 ? args[idx + 1] : null;
+}
+
+test('generate: uses --append-system-prompt, not --system-prompt', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate(
+    { userMessage: 'test', systemPrompt: 'be a researcher' },
+    { spawnFn: spy }
+  );
+  const args = spy.getArgs();
+  assert.ok(args.includes('--append-system-prompt'), '--append-system-prompt must be present');
+  assert.ok(!args.includes('--system-prompt'), '--system-prompt must NOT appear');
+});
+
+test('generate: --tools contains exactly WebSearch,WebFetch', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'test' }, { spawnFn: spy });
+  const val = flagValue(spy.getArgs(), '--tools');
+  assert.equal(val, 'WebSearch,WebFetch', '--tools value must be exactly "WebSearch,WebFetch"');
+});
+
+test('generate: --allowedTools contains exactly WebSearch,WebFetch', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'test' }, { spawnFn: spy });
+  const val = flagValue(spy.getArgs(), '--allowedTools');
+  assert.equal(val, 'WebSearch,WebFetch', '--allowedTools value must be exactly "WebSearch,WebFetch"');
+});
+
+test('generate: forbidden tools absent from both --tools and --allowedTools', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'test' }, { spawnFn: spy });
+  const args = spy.getArgs();
+  const toolsVal = flagValue(args, '--tools') ?? '';
+  const allowedVal = flagValue(args, '--allowedTools') ?? '';
+  const forbidden = ['Bash', 'Read', 'Write', 'Edit', 'Glob', 'Grep'];
+  for (const tool of forbidden) {
+    assert.ok(!toolsVal.includes(tool), `${tool} must NOT appear in --tools`);
+    assert.ok(!allowedVal.includes(tool), `${tool} must NOT appear in --allowedTools`);
+  }
+});
+
+test('generate: both --tools and --allowedTools appear exactly once', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'test' }, { spawnFn: spy });
+  const args = spy.getArgs();
+  assert.equal(args.filter((a) => a === '--tools').length, 1, 'exactly one --tools flag');
+  assert.equal(args.filter((a) => a === '--allowedTools').length, 1, 'exactly one --allowedTools flag');
+});
+
+test('generate: -- separator appears immediately before user message', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'hello world' }, { spawnFn: spy });
+  const args = spy.getArgs();
+  const sepIdx = args.lastIndexOf('--');
+  assert.ok(sepIdx !== -1, '-- separator must be present');
+  assert.equal(args[sepIdx + 1], 'hello world', 'user message must follow --');
+});
+
+// ─── runWorkflowLocal: insufficient-evidence guard ────────────────────────────
+
+const EMPTY_OUTPUT_PROVIDER = {
+  generate: async () => ({
+    content: JSON.stringify({ sources: [], signals: [] }),
+    structuredOutput: { sources: [], signals: [] },
+    provider: 'local-cli',
+    model: 'sonnet',
+    executionMode: 'local-cli',
+    startedAt: '2026-06-15T00:00:00Z',
+    completedAt: '2026-06-15T00:00:30Z',
+    latencyMs: 30000,
+    usage: { inputTokens: 'not_available', outputTokens: 'not_available' },
+    toolActivity: 'not_available',
+    warnings: [],
+    rawProviderOutput: { exitCode: 0 },
+    estimatedApiCost: 'not_applicable',
+    subscriptionUsage: 'not_available',
+  }),
+};
+
+test('runWorkflowLocal: zero signals → stage_01_insufficient_evidence, not stage_01_completed', async () => {
+  const base = mkdtempSync(join(tmpdir(), 'wf-empty-'));
+  try {
+    const result = await runWorkflowLocal(REQUEST, {
+      baseDir: base,
+      now: '2026-06-15T00:00:00.000Z',
+      _provider: EMPTY_OUTPUT_PROVIDER,
+    });
+    assert.equal(result.status, 'stage_01_insufficient_evidence');
+    assert.notEqual(result.status, 'stage_01_completed', 'must not be marked completed');
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('runWorkflowLocal: insufficient evidence → awaitingReview is false', async () => {
+  const base = mkdtempSync(join(tmpdir(), 'wf-empty-'));
+  try {
+    const result = await runWorkflowLocal(REQUEST, {
+      baseDir: base,
+      now: '2026-06-15T00:00:00.000Z',
+      _provider: EMPTY_OUTPUT_PROVIDER,
+    });
+    assert.equal(result.awaitingReview, false, 'empty output must not queue a human review');
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('runWorkflowLocal: insufficient evidence → review-gate records correct status', async () => {
+  const base = mkdtempSync(join(tmpdir(), 'wf-empty-'));
+  try {
+    const { readFileSync: rf } = await import('node:fs');
+    const result = await runWorkflowLocal(REQUEST, {
+      baseDir: base,
+      now: '2026-06-15T00:00:00.000Z',
+      _provider: EMPTY_OUTPUT_PROVIDER,
+    });
+    const gate = JSON.parse(rf(join(result.dir, 'review-gate.json'), 'utf8'));
+    assert.equal(gate.status, 'stage_01_insufficient_evidence');
+    assert.equal(gate.awaitingReview, false);
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('runWorkflowLocal: insufficient evidence → raw artifacts still written', async () => {
+  const base = mkdtempSync(join(tmpdir(), 'wf-empty-'));
+  try {
+    const result = await runWorkflowLocal(REQUEST, {
+      baseDir: base,
+      now: '2026-06-15T00:00:00.000Z',
+      _provider: EMPTY_OUTPUT_PROVIDER,
+    });
+    assert.ok(result.files.includes('00-sources.json'), 'sources file must be written');
+    assert.ok(result.files.includes('01-market-signals.json'), 'signals file must be written');
+    assert.ok(result.files.includes('01-raw-output.json'), 'raw output must be written');
+    assert.ok(result.files.includes('metadata.json'), 'metadata must be written');
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});

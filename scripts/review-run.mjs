@@ -29,16 +29,23 @@ const args = process.argv.slice(2);
 const runFlag = args.indexOf('--run');
 const listFlag = args.includes('--list') || args.includes('-l');
 const helpFlag = args.includes('--help') || args.includes('-h');
+const decisionFlag = args.indexOf('--decision');
+const nonInteractiveDecision = decisionFlag !== -1 ? args[decisionFlag + 1] : null;
+const noteFlag = args.indexOf('--note');
+const nonInteractiveNote = noteFlag !== -1 ? args[noteFlag + 1] : null;
 
 if (helpFlag) {
   console.log(`
 Usage: npm run workflow:review -- --run <run-id>
+       npm run workflow:review -- --run <run-id> --decision approve [--note "text"]
        npm run workflow:review -- --list
 
 Options:
-  --run <id>   Run to review
-  --list       List all runs with their review status
-  --help       Show this message
+  --run <id>          Run to review
+  --list              List all runs with their review status
+  --decision <val>    Record decision non-interactively (approve|reject|skip)
+  --note <text>       Optional note to attach to the decision
+  --help              Show this message
 `);
   process.exit(0);
 }
@@ -180,34 +187,49 @@ console.log('    rerun    — instructions to rerun Stage 01 without deciding');
 console.log('    skip     — exit without recording a decision');
 console.log('');
 
-const rl = createInterface({ input, output });
-const decision = (await rl.question('  Decision (approve / reject / rerun / skip): ')).trim().toLowerCase();
+let decision;
+let note = '';
 
-if (!['approve', 'reject', 'rerun', 'skip'].includes(decision)) {
-  console.log('\n  Unrecognised input. No decision recorded.\n');
+if (nonInteractiveDecision) {
+  decision = nonInteractiveDecision.trim().toLowerCase();
+  note = nonInteractiveNote ? nonInteractiveNote.trim() : '';
+  if (!['approve', 'reject', 'skip'].includes(decision)) {
+    console.error(`\n  ✗  Invalid --decision value: "${decision}". Use approve, reject, or skip.\n`);
+    process.exit(1);
+  }
+  console.log(`  Decision: ${decision}${note ? ` — "${note}"` : ''}`);
+} else {
+  const rl = createInterface({ input, output });
+  decision = (await rl.question('  Decision (approve / reject / rerun / skip): ')).trim().toLowerCase();
+
+  if (!['approve', 'reject', 'rerun', 'skip'].includes(decision)) {
+    console.log('\n  Unrecognised input. No decision recorded.\n');
+    rl.close();
+    process.exit(0);
+  }
+
+  if (decision === 'skip') {
+    console.log('\n  Skipped. No decision recorded.\n');
+    rl.close();
+    process.exit(0);
+  }
+
+  if (decision === 'rerun') {
+    console.log(`\n  To rerun: npm run workflow:local -- --case <case-id>`);
+    console.log('  No decision recorded for this run.');
+    rl.close();
+    process.exit(0);
+  }
+
+  const noteAnswer = await rl.question('  Optional note (press Enter to skip): ');
+  note = noteAnswer.trim();
   rl.close();
-  process.exit(0);
 }
 
 if (decision === 'skip') {
   console.log('\n  Skipped. No decision recorded.\n');
-  rl.close();
   process.exit(0);
 }
-
-if (decision === 'rerun') {
-  const caseId = readJson('request.json')?.caseId || '01-water-utilities-spain';
-  console.log(`\n  To rerun: npm run workflow:local -- --case <case-id>`);
-  console.log('  No decision recorded for this run.');
-  rl.close();
-  process.exit(0);
-}
-
-let note = '';
-const noteAnswer = await rl.question('  Optional note (press Enter to skip): ');
-note = noteAnswer.trim();
-
-rl.close();
 
 const decidedAt = new Date().toISOString();
 const newGate = {
