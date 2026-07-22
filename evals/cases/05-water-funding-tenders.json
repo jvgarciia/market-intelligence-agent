@@ -13,7 +13,7 @@
     "marketSignals": [
       "funding and tender signalTypes should lead",
       "Every funding/tender claim MUST have a publication date and pass the recency threshold",
-      "commercialTiming is the decisive scoring dimension for candidates tied to these"
+      "momentumSignal (the renamed timing dimension) should be the standout score for candidates tied to these — but per the current rubric it is a bonus dimension, not a decisive one on its own"
     ],
     "candidates": [
       "Organisations should be linked to a specific programme or tender via evidence",

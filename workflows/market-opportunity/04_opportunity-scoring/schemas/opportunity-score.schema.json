@@ -2,24 +2,23 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "market-opportunity/opportunity-score",
   "title": "Opportunity Score",
-  "description": "An explainable score for one candidate against the six dimensions in references/scoring-rubric.md. Stage 04 output.",
+  "description": "An explainable score for one candidate against the five ICP dimensions in references/scoring-rubric.md. Stage 04 output.",
   "type": "object",
   "required": ["candidateId", "dimensions", "totalScore", "rationale", "metadata"],
   "properties": {
     "candidateId": { "type": "string" },
     "dimensions": {
       "type": "object",
-      "required": ["problemUrgency", "solutionFit", "commercialTiming", "evidenceStrength", "marketAccessibility", "strategicRelevance"],
+      "required": ["utilitySize", "nrwEvidence", "regionFit", "targetRolePresence", "momentumSignal"],
       "properties": {
-        "problemUrgency": { "$comment": "see scoredDimension shape", "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
-        "solutionFit": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
-        "commercialTiming": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
-        "evidenceStrength": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
-        "marketAccessibility": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
-        "strategicRelevance": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } }
+        "utilitySize": { "$comment": "see scoredDimension shape", "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "nrwEvidence": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "regionFit": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "targetRolePresence": { "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } },
+        "momentumSignal": { "$comment": "bonus dimension — a low score here is expected and not a red flag on its own", "type": "object", "required": ["score", "justification"], "properties": { "score": { "type": "integer", "minimum": 0, "maximum": 5 }, "justification": { "type": "string" } } }
       }
     },
-    "totalScore": { "type": "integer", "minimum": 0, "maximum": 30, "description": "Sum of the six dimension scores. Verified by the orchestrator." },
+    "totalScore": { "type": "integer", "minimum": 0, "maximum": 25, "description": "Sum of the five dimension scores. Verified by the orchestrator." },
     "rationale": { "type": "string" },
     "metadata": {
       "type": "object",

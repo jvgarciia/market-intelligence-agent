@@ -11,7 +11,7 @@ No arbitrary numbers.
   influence any score.
 
 # Reference context
-- `../references/scoring-rubric.md` (the six dimensions, the 0–5 scale, hard rules).
+- `../references/scoring-rubric.md` (the five ICP dimensions, the 0–5 scale, hard rules).
 - `./schemas/opportunity-score.schema.json`.
 
 # Tools allowed
@@ -19,21 +19,20 @@ No arbitrary numbers.
 - `mock` mode: deterministic fixtures only.
 
 # Process
-1. For each candidate, score all six dimensions (`problemUrgency`, `solutionFit`,
-   `commercialTiming`, `evidenceStrength`, `marketAccessibility`,
-   `strategicRelevance`) on 0–5.
+1. For each candidate, score all five dimensions (`utilitySize`, `nrwEvidence`,
+   `regionFit`, `targetRolePresence`, `momentumSignal`) on 0–5.
 2. Write a one-line `justification` per dimension, referencing `evidenceId`s, or
    stating "inference — no validated evidence" (which caps that dimension at 2).
-3. Compute `totalScore` = sum of the six (0–30).
+3. Compute `totalScore` = sum of the five (0–25).
 4. Write a short overall `rationale`.
 
 # Output schema
 - `04-scores.json` — array of `opportunity-score`, one per candidate.
 
 # Verification checks
-- All six dimensions present; each `score` is an integer 0–5 with a non-empty
+- All five dimensions present; each `score` is an integer 0–5 with a non-empty
   `justification`.
-- `totalScore` equals the sum of the six dimension scores (recomputed and checked).
+- `totalScore` equals the sum of the five dimension scores (recomputed and checked).
 - Every `candidateId` exists in `02-candidates.json`.
 
 # Failure conditions

@@ -25,6 +25,29 @@
     },
     "uncertainties": { "type": "array", "items": { "type": "string" } },
     "recommendedNextAction": { "type": "string", "description": "A research or marketing action only. Never outreach/contact." },
+    "contacts": {
+      "type": "array",
+      "description": "People found at this organisation matching a target role. Optional — an empty or absent list is an honest result, not a failure. Never used to trigger outreach; a human decides what to do with this information.",
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "targetRoleCategory", "sourceUrl", "sourceType"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string", "description": "The job title as found, verbatim." },
+          "targetRoleCategory": {
+            "type": "string",
+            "enum": ["innovation", "operations", "asset-management", "digital-transformation", "other"]
+          },
+          "sourceUrl": { "type": "string", "description": "The exact URL this contact was found at. Never invent." },
+          "sourceType": {
+            "type": "string",
+            "enum": ["linkedin-search", "company-team-page", "trade-association-listing", "press-mention", "other"]
+          },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "uncertainty": { "type": "string", "description": "What is unconfirmed about this contact, e.g. role may be outdated." }
+        }
+      }
+    },
     "humanVerificationRequired": {
       "type": "array",
       "minItems": 1,
