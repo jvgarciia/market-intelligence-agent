@@ -177,6 +177,17 @@ test('generate: throws on non-zero exit code', async () => {
   );
 });
 
+test('generate: surfaces stdout on non-zero exit, not just stderr', async () => {
+  // Some CLI failures (e.g. "Not logged in · Please run /login") print to
+  // stdout, not stderr — the error message must include both or the real
+  // reason is invisible.
+  const failSpawn = makeSpawnFn({ status: 1, stdout: 'Not logged in · Please run /login', stderr: '' });
+  await assert.rejects(
+    () => localCliGenerate({ userMessage: 'test' }, { spawnFn: failSpawn }),
+    /Not logged in/
+  );
+});
+
 // ─── generate: malformed output ───────────────────────────────────────────────
 
 test('generate: returns warning and null structuredOutput for non-JSON response', async () => {
