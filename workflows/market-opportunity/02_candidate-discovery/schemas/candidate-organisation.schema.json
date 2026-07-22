@@ -10,7 +10,7 @@
     "name": { "type": "string" },
     "organisationType": {
       "type": "string",
-      "enum": ["water-utility", "drinking-water-company", "infrastructure-operator", "municipality", "public-water-organisation", "regulator", "competitor", "other"]
+      "enum": ["water-utility", "drinking-water-company", "multi-utility-company", "infrastructure-operator", "municipality", "public-water-organisation", "regulator", "competitor", "other"]
     },
     "location": {
       "type": "object",

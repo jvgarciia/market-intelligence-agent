@@ -2,9 +2,10 @@
 
 # Purpose
 Identify the organisations that may be relevant potential customers or market
-actors in the target market: utilities, drinking-water companies, infrastructure
-operators, municipalities, public water organisations, regulators, and named
-competitors. Each candidate must carry evidence of why it is relevant.
+actors in the target market: utilities, drinking-water companies, multi-utility
+companies, infrastructure operators, municipalities, public water organisations,
+regulators, and named competitors. Each candidate must carry evidence of why it
+is relevant.
 
 # Inputs
 - `request.json` (validated `run-request`).

@@ -56,10 +56,15 @@ either scaffolding-only or fully missing.
       + web search, schema-validated output (`lib/workflow/stage01.mjs`)
 - [x] Tested and approved on a real run — but for **Spain**, not Italy (14 sources,
       13 signals, `runs/2026-06-15T20-05-00-105Z__2cb46f03`)
-- [x] Stage 02 (candidate-discovery) *contract* defines web-search-based
-      organisation confirmation
-- [ ] **No Italy-specific run has ever been made**
-- [ ] Stage 02 has no live code yet — contract + schema only
+- [x] Stage 02 (candidate-discovery) now has a **live execution path**, mirroring
+      Stage 01: `lib/workflow/stage02.mjs` + `lib/workflow/runStage02Local.mjs` +
+      `npm run workflow:stage02 -- --run <id>`. Requires the target run's Stage 01
+      output to already be approved — refuses to run otherwise
+- [x] `organisationType` enum extended with `multi-utility-company` to match the
+      actual ICP (was missing before)
+- [x] 21 new tests (118/118 passing) — mock provider only, zero real CLI calls
+- [ ] **No Italy-specific run has ever been made** — Stage 02 has never actually
+      executed for real yet, only against mocks in tests
 - [ ] **No LinkedIn access at all.** Web search only (Tavily / Claude's built-in
       search). LinkedIn is currently only referenced as a blocked word in output
       text, not as a usable source
@@ -78,7 +83,10 @@ either scaffolding-only or fully missing.
       (`lib/workflow/stage01.mjs`, `providers/localCli.mjs`, `runWorkflowLocal.mjs`)
 - [x] Safety guards: strips paid API keys, blocks production use, flags
       insufficient-evidence runs instead of false-succeeding
-- [ ] No equivalent live collection script for **candidates** (Stage 02) yet
+- [x] Candidates (Stage 02) now have the same pipeline: prompt builder → CLI call →
+      JSON parse → per-item schema validation → signalId/sourceId cross-reference →
+      duplicate-org check (`lib/workflow/stage02.mjs`, `runStage02Local.mjs`) —
+      not yet run against real data (see item 2)
 - [ ] No collection step exists for **people/contacts** at all (see item 5)
 
 ---
