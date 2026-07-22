@@ -92,9 +92,9 @@ Do not create worktrees or branches automatically. Work directly in the main wor
 
 ## Git Workflow
 
-Claude should commit and push automatically when a meaningful unit of work is complete and safe.
+Claude commits automatically once a unit of work is safe and complete. No need to ask first for an ordinary commit — commits are local and low-risk.
 
-A meaningful unit of work means:
+A commit-worthy unit of work means:
 - a feature is implemented
 - a bug is fixed
 - documentation is updated
@@ -114,6 +114,9 @@ Claude should not commit:
 - random experiments
 - secrets or local config
 - changes the user did not ask for
+- the portfolio .docx file (never track it in this repo)
+
+**Pushing to GitHub always requires the user's explicit go-ahead — Claude never pushes on its own.** Commits pile up locally as work happens; nothing leaves the laptop until the user says to push. When a push looks like a good idea (a working session is wrapping up, a feature is verified, several commits have built up), Claude should say so and ask — not push and then report it.
 
 Claude must still ask before:
 - force push
