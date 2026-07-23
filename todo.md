@@ -65,6 +65,14 @@ either scaffolding-only or fully missing.
       Stage 01: `lib/workflow/stage02.mjs` + `lib/workflow/runStage02Local.mjs` +
       `npm run workflow:stage02 -- --run <id>`. Requires the target run's Stage 01
       output to already be approved — refuses to run otherwise
+- [x] Stage 03 (evidence-validation) now also has a **live execution path**:
+      `lib/workflow/stage03.mjs` + `lib/workflow/runStage03Local.mjs` +
+      `npm run workflow:stage03 -- --run <id>`. Requires Stage 01 approved AND
+      Stage 02 completed — refuses to run otherwise. Judges every signal claim
+      and candidate relevanceEvidence claim against `evidence-standards.md`,
+      producing `03-validation.json` (`{ validated, rejected }`); nothing is
+      dropped silently. 23 new tests (142/142 passing). **Not yet run against
+      real Italy data** — this is the next step, not done yet.
 - [x] **Stage 02 run live against Italy** — 10 candidates, 0 rejected. Correctly
       separated real water utilities (Gruppo CAP, Uniacque, MM S.p.A., Acea Ato 2,
       Acqualatina) from competitors already selling into these utilities (Aganova,
@@ -174,15 +182,17 @@ evidence-quality bug (regional-vs-national figures wrongly flagged as conflictin
 **Decided and designed, not yet live:** the ICP scoring criteria (item 1) and the
 contact-sourcing method + schema field (item 5) are locked in at the
 schema/contract level and verified against the mock pipeline — but **no live code
-executes Stage 03, 04, or 05 yet**. Stage 03 (evidence validation) is the next
-stage in sequence and has deliberately **not** been started.
+executes Stage 04 or 05 yet**.
+
+**Stage 03 (evidence validation) code now exists** — `stage03.mjs` +
+`runStage03Local.mjs`, same pattern as Stages 01–02, 142/142 tests passing — but
+it has **not yet been run against the real Italy run**. That run is the next
+step: `npm run workflow:stage03 -- --run <run-id>` against the approved Italy
+run, then review `02-candidates.json` + `03-validation.json` together — this
+stage is where Review Gate 1 lives, and it's the first real signal on whether
+the whole chain (signals → candidates → validated evidence) is producing
+something useful before sinking more time into Stages 04–05.
 
 **Still missing entirely:** LinkedIn access (search-only, as decided), EU tender
 integration, and a curated Italian news/trade-association source list. No stage
 beyond 02 has ever produced a real (non-mock) result.
-
-**Suggested real next step (not yet started, by instruction):** wire Stage 03
-(evidence validation) live, the same pattern as Stages 01–02 — it decides which of
-these 10 candidates' supporting evidence actually holds up, using the
-`evidence-standards.md` rules (now including the scope-vs-conflict fix) before
-Stage 04 scores anything.
