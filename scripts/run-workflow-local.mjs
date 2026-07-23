@@ -54,7 +54,7 @@ Available cases:`);
   console.log(`
 Environment variables:
   LOCAL_CLAUDE_MODEL        Override model (e.g. "sonnet", "opus")
-  LOCAL_CLAUDE_TIMEOUT_MS   Override timeout (default: 360000)
+  LOCAL_CLAUDE_TIMEOUT_MS   Override timeout (default: 540000)
 
 This uses your Claude Code subscription, not metered API billing.
 After the run, review with: npm run workflow:review -- --run <run-id>
@@ -91,7 +91,7 @@ if (modelOverride) {
 
 const model = process.env.LOCAL_CLAUDE_MODEL || 'sonnet';
 const timeoutSec = Math.round(
-  parseInt(process.env.LOCAL_CLAUDE_TIMEOUT_MS || '360000', 10) / 1000
+  parseInt(process.env.LOCAL_CLAUDE_TIMEOUT_MS || '540000', 10) / 1000
 );
 
 console.log('\n══════════════════════════════════════════════════════════');

@@ -56,7 +56,7 @@ Available cases:`);
   console.log(`
 Environment variables:
   LOCAL_CLAUDE_MODEL        Model alias (default: sonnet)
-  LOCAL_CLAUDE_TIMEOUT_MS   Timeout in ms (default: 360000)
+  LOCAL_CLAUDE_TIMEOUT_MS   Timeout in ms (default: 540000)
 
 Dimensions evaluated:
   - Signal count and relevance distribution
@@ -91,7 +91,7 @@ try {
 
 const model = process.env.LOCAL_CLAUDE_MODEL || 'sonnet';
 const timeoutSec = Math.round(
-  parseInt(process.env.LOCAL_CLAUDE_TIMEOUT_MS || '360000', 10) / 1000
+  parseInt(process.env.LOCAL_CLAUDE_TIMEOUT_MS || '540000', 10) / 1000
 );
 
 // ─── confirmation ─────────────────────────────────────────────────────────────
