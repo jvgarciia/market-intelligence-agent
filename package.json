@@ -13,6 +13,7 @@
     "workflow:stage02": "node scripts/run-stage02-local.mjs",
     "workflow:stage03": "node scripts/run-stage03-local.mjs",
     "workflow:stage04": "node scripts/run-stage04-local.mjs",
+    "workflow:stage05": "node scripts/run-stage05-local.mjs",
     "workflow:review": "node scripts/review-run.mjs",
     "eval:mock": "node scripts/run-eval.mjs",
     "eval:live": "node scripts/run-eval-live.mjs",

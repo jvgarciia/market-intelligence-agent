@@ -586,6 +586,25 @@ test('generate: -- separator appears immediately before user message', async () 
   assert.equal(args[sepIdx + 1], 'hello world', 'user message must follow --');
 });
 
+// ─── generate: tools parameter ───────────────────────────────────────────────
+
+test('generate: defaults --tools/--allowedTools to WebSearch,WebFetch when tools is omitted', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'test' }, { spawnFn: spy });
+  const args = spy.getArgs();
+  assert.equal(flagValue(args, '--tools'), 'WebSearch,WebFetch');
+  assert.equal(flagValue(args, '--allowedTools'), 'WebSearch,WebFetch');
+});
+
+test('generate: tools param restricts --tools/--allowedTools to the given list', async () => {
+  const spy = captureSpawnFn();
+  await localCliGenerate({ userMessage: 'test', tools: ['WebSearch'] }, { spawnFn: spy });
+  const args = spy.getArgs();
+  assert.equal(flagValue(args, '--tools'), 'WebSearch');
+  assert.equal(flagValue(args, '--allowedTools'), 'WebSearch');
+  assert.ok(!flagValue(args, '--tools').includes('WebFetch'), 'WebFetch must be structurally excluded');
+});
+
 // ─── runWorkflowLocal: insufficient-evidence guard ────────────────────────────
 
 const EMPTY_OUTPUT_PROVIDER = {
