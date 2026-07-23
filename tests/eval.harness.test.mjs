@@ -360,12 +360,12 @@ test('summarizeIssues() counts correctly', () => {
 
 // ─── end-to-end mock evaluation ───────────────────────────────────────────────
 
-test('runEvaluation() runs all five real eval cases in mock mode and produces all files', () => {
+test('runEvaluation() runs all real eval cases in mock mode and produces all files', () => {
   const resultsBase = mkdtempSync(join(tmpdir(), 'eval-e2e-'));
   const runsBase    = mkdtempSync(join(tmpdir(), 'eval-runs-'));
   try {
     const caseIds = listCases();
-    assert.equal(caseIds.length, 5, 'Should find 5 eval cases');
+    assert.equal(caseIds.length, 6, 'Should find 6 eval cases');
 
     for (const caseId of caseIds) {
       const result = runEvaluation(caseId, {
@@ -453,9 +453,9 @@ test('runEvaluation() comparison.json includes mock data warning and feature dif
 
 // ─── case loading ─────────────────────────────────────────────────────────────
 
-test('listCases() returns 5 cases', () => {
+test('listCases() returns 6 cases', () => {
   const cases = listCases();
-  assert.equal(cases.length, 5, 'Should find exactly 5 eval cases');
+  assert.equal(cases.length, 6, 'Should find exactly 6 eval cases');
 });
 
 test('loadCase() loads a valid eval case', () => {

@@ -77,7 +77,7 @@ against the same cases and compared to the baseline.
 
 ## Test cases
 
-`cases/*.json` — five realistic cases covering the prompt's example categories.
+`cases/*.json` — six realistic cases covering the prompt's example categories.
 Each defines **expected characteristics** (not fabricated exact answers): what a
 strong result should contain, what it must avoid, and what to watch for. No
 confidential HULO information is encoded.
@@ -89,6 +89,7 @@ confidential HULO information is encoded.
 | `cases/03-digital-water-latam.json` | Digital transformation in an emerging region |
 | `cases/04-leak-detection-competitors-europe.json` | Competitor landscape |
 | `cases/05-water-funding-tenders.json` | Public funding / tenders signal |
+| `cases/06-water-utilities-italy.json` | The actual HULO.ai ICP — Italy, NRW/leak reduction |
 
 ---
 

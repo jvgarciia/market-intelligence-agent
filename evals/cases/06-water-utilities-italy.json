@@ -1,0 +1,34 @@
+{
+  "id": "06-water-utilities-italy",
+  "title": "Drinking-water and multi-utility companies in Italy",
+  "category": "Single national market — HULO.ai ICP",
+  "input": {
+    "targetMarket": "Italy",
+    "targetCustomerType": "drinking-water utilities and multi-utility companies",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Identify Italian water organisations actively working on NRW (non-revenue water) or leak reduction and network modernization, to shortlist for outbound marketing and eventually contact",
+    "constraints": [
+      "Italy only, focus on Lombardia and Lazio (largest utility markets by population served)",
+      "prioritise organisations with an active, named NRW or leak-reduction initiative over generic efficiency mentions"
+    ]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "Should surface NRW / leak reduction as a real, named problem area — not just generic 'efficiency'",
+      "Should look for Italian national or EU regulation, funding programmes, and tenders tied to network modernization",
+      "Signals must each carry a source and a date where a date is expected"
+    ],
+    "candidates": [
+      "Real, identifiable Italian water utilities and multi-utility companies (regional or municipal)",
+      "organisationType should be from the allowed enum, including multi-utility-company where applicable",
+      "Each candidate must carry relevance evidence, not just a name"
+    ],
+    "mustAvoid": [
+      "Inventing utilities that cannot be sourced",
+      "Confusing bottled-water brands with network/utility operators",
+      "Any outreach or contact instruction in recommendations"
+    ],
+    "sourceExpectations": "Prefer Tier A/B (Italian regulators, ARERA, official utility sites, trade press) over promotional vendor pages"
+  },
+  "notes": "First real test against the actual HULO.ai ICP, not a generic placeholder market."
+}

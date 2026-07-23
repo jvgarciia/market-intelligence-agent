@@ -24,6 +24,24 @@ Recency is judged against the claim type, not a single global cutoff:
 A claim with **no determinable date** where a date is expected → reject as
 `outdated` (we cannot prove recency) unless corroborated by a Tier-A source.
 
+## Scope before conflict
+
+Two numbers about "the same" thing can both be true if they describe different
+scopes — a regional average and a national average, a single organisation's
+figure and an industry-wide figure, a metro-area figure and a country-wide one.
+Before recording two figures as **conflicting** (and lowering confidence for it):
+
+1. Check whether each number's scope is explicitly stated (region, country,
+   organisation, time period).
+2. If the scopes differ, they are not in conflict — record them as separate,
+   scoped facts (e.g. "Lombardia regional average: 23.4%" and "Italy national
+   average: 42%"), not as one uncertain, disputed figure.
+3. Only call it a genuine conflict when the scopes match and the numbers still
+   disagree.
+
+A false "conflict" needlessly caps confidence and buries two individually
+useful, individually true facts inside one unnecessary hedge.
+
 ## Rejection reasons (the only allowed values)
 
 Use exactly one of these for `rejectionReason`:
