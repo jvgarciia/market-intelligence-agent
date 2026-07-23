@@ -1,11 +1,15 @@
 # Stage 02 — Candidate Discovery
 
 # Purpose
-Identify the organisations that may be relevant potential customers or market
-actors in the target market: utilities, drinking-water companies, multi-utility
-companies, infrastructure operators, municipalities, public water organisations,
-regulators, and named competitors. Each candidate must carry evidence of why it
-is relevant.
+Identify the organisations that fit the run's `targetCustomerType` — normally
+buyer-side entities: utilities, drinking-water companies, multi-utility
+companies, infrastructure operators, municipalities, and public water
+organisations. Each candidate must carry evidence of why it is relevant.
+
+Regulators and competitors are only in scope when `targetCustomerType` itself
+asks for that kind of landscape mapping (e.g. "competing vendors, for
+positioning" — see `organisationType` scope rule below). For an ordinary
+lead-gen run, they are not candidates.
 
 # Inputs
 - `request.json` (validated `run-request`).
@@ -30,6 +34,21 @@ is relevant.
 4. Do not invent organisations. A candidate with no relevance evidence is not a
    candidate.
 
+## `organisationType` scope rule
+- Check `organisationType` against `targetCustomerType` before emitting a
+  candidate. If `targetCustomerType` describes utilities/companies to sell to,
+  do **not** emit `regulator` or `competitor` candidates — a regulator or
+  competitor mentioned in the signals belongs in Stage 01 as a signal
+  (`signalType: regulation` / `competitor-development`), not as a Stage 02
+  candidate. Only use `regulator`/`competitor` when `targetCustomerType` is
+  itself asking for that landscape (e.g. competitor mapping for positioning).
+- `public-water-organisation` is reserved for a body with **direct** ownership,
+  operation, or procurement authority over water infrastructure — e.g. an
+  Italian ATO/Ente di Governo dell'Ambito. A general regional or municipal
+  government acting only as a funding or policy conduit, with no such direct
+  remit, does not qualify under any `organisationType` — leave it out rather
+  than force-fitting it into the closest-sounding type.
+
 # Output schema
 - `02-candidates.json` — array of `candidate-organisation`.
 
@@ -44,6 +63,9 @@ is relevant.
   with guesses.
 - Geographic/scope ambiguity → keep the candidate but flag it in `uncertainty`
   for the reviewer, do not silently include or exclude.
+- An `organisationType` that does not fit `targetCustomerType` (e.g. a
+  regulator or vendor when the target is utilities) is a scope violation —
+  leave it out; do not include it "for completeness."
 
 # Human review requirements
 - Feeds **Review Gate 1** (after Stage 03): the reviewer checks this candidate

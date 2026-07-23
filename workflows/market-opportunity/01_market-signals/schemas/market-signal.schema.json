@@ -10,7 +10,7 @@
     "claim": { "type": "string", "description": "A single factual statement, not a bundle." },
     "signalType": {
       "type": "string",
-      "enum": ["regulation", "funding", "infrastructure-investment", "market-problem", "digitalisation", "tender", "technology-adoption", "competitor-development"]
+      "enum": ["regulation", "funding", "infrastructure-investment", "market-problem", "digitalisation", "tender", "technology-adoption", "competitor-development", "organisation-scale"]
     },
     "relevance": { "type": "string", "enum": ["high", "medium", "low"] },
     "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
