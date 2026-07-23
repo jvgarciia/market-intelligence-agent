@@ -41,10 +41,11 @@ either scaffolding-only or fully missing.
 - [x] Mock fixtures updated to the new dimension names and re-verified end-to-end
       (`lib/workflow/mockPipeline.mjs`, `npm test` — 97/97 pass, `npm run workflow:demo`
       produces a valid `04-scores.json`)
-- [ ] Rubric has never been run against real data — mock fixtures only, and only
-      Stage 01 has ever executed live (see item 2)
+- [ ] Rubric itself (Stage 04 scoring) has never been run against real data —
+      Stage 04 has no live code yet (see item 4). Stages 01–02 have now run live
+      against real Italy data, so the evidence this rubric would score on now exists
 - [ ] `location.region` on candidates is still free text; nothing yet enforces it
-      matches `regionFit`'s Italy scope when Stage 02 goes live
+      matches `regionFit`'s Italy scope
 
 ---
 
@@ -54,17 +55,28 @@ either scaffolding-only or fully missing.
 
 - [x] Stage 01 (market-signals) has a working **live** path: local Claude Code CLI
       + web search, schema-validated output (`lib/workflow/stage01.mjs`)
-- [x] Tested and approved on a real run — but for **Spain**, not Italy (14 sources,
-      13 signals, `runs/2026-06-15T20-05-00-105Z__2cb46f03`)
-- [x] Stage 02 (candidate-discovery) now has a **live execution path**, mirroring
+- [x] Tested and approved on a real Spain run (14 sources, 13 signals,
+      `runs/2026-06-15T20-05-00-105Z__2cb46f03`)
+- [x] **Tested and approved on a real Italy run** — the actual target market:
+      16 signals / 14 sources, 0 rejected, narrowed to Lombardia + Lazio after two
+      360s timeouts on an all-regions request
+      (`runs/2026-07-23T09-14-30-606Z__864fc892`, `evals/cases/06-water-utilities-italy.json`)
+- [x] Stage 02 (candidate-discovery) has a **live execution path**, mirroring
       Stage 01: `lib/workflow/stage02.mjs` + `lib/workflow/runStage02Local.mjs` +
       `npm run workflow:stage02 -- --run <id>`. Requires the target run's Stage 01
       output to already be approved — refuses to run otherwise
+- [x] **Stage 02 run live against Italy** — 10 candidates, 0 rejected. Correctly
+      separated real water utilities (Gruppo CAP, Uniacque, MM S.p.A., Acea Ato 2,
+      Acqualatina) from competitors already selling into these utilities (Aganova,
+      WaterTech) and non-customer bodies (EGATO5, Regione Lombardia, ARERA).
+      Reviewed and approved — recorded in that run's `review-gate.json`
 - [x] `organisationType` enum extended with `multi-utility-company` to match the
       actual ICP (was missing before)
-- [x] 21 new tests (118/118 passing) — mock provider only, zero real CLI calls
-- [ ] **No Italy-specific run has ever been made** — Stage 02 has never actually
-      executed for real yet, only against mocks in tests
+- [x] 21 new tests (119/119 passing) — mock provider only, zero real CLI calls
+- [x] Found and fixed a real evidence-quality bug from the Italy run: a regional
+      figure (23.4%) and a national figure (42%) were flagged as "conflicting"
+      when they were just different scopes. Rule added to
+      `references/evidence-standards.md` — applies to every future run automatically
 - [ ] **No LinkedIn access at all.** Web search only (Tavily / Claude's built-in
       search). LinkedIn is currently only referenced as a blocked word in output
       text, not as a usable source
@@ -83,10 +95,10 @@ either scaffolding-only or fully missing.
       (`lib/workflow/stage01.mjs`, `providers/localCli.mjs`, `runWorkflowLocal.mjs`)
 - [x] Safety guards: strips paid API keys, blocks production use, flags
       insufficient-evidence runs instead of false-succeeding
-- [x] Candidates (Stage 02) now have the same pipeline: prompt builder → CLI call →
+- [x] Candidates (Stage 02) have the same pipeline: prompt builder → CLI call →
       JSON parse → per-item schema validation → signalId/sourceId cross-reference →
       duplicate-org check (`lib/workflow/stage02.mjs`, `runStage02Local.mjs`) —
-      not yet run against real data (see item 2)
+      now proven against real Italy data (see item 2)
 - [ ] No collection step exists for **people/contacts** at all (see item 5)
 
 ---
@@ -151,22 +163,26 @@ either scaffolding-only or fully missing.
 
 ## Honest summary
 
-**Genuinely done and tested:** Stage 01 live research (on Spain, not Italy yet),
-the full safety/eval/review infrastructure.
+**Genuinely done, tested, and now proven on real Italy data:** Stage 01 (market
+signals) and Stage 02 (candidate discovery) both have live execution paths and
+have both run successfully against the actual target market — 16 signals / 14
+sources → 10 candidates, 0 rejected at either stage, both reviewed and approved
+(`runs/2026-07-23T09-14-30-606Z__864fc892`). The full safety/eval/review
+infrastructure held up under a real run, including catching and fixing a genuine
+evidence-quality bug (regional-vs-national figures wrongly flagged as conflicting).
 
 **Decided and designed, not yet live:** the ICP scoring criteria (item 1) and the
-contact-sourcing method + schema field (item 5) are now both locked in at the
-schema/contract level and verified against the mock pipeline (97/97 tests,
-`workflow:demo` produces valid output) — but **no live code executes Stage 02, 03,
-04, or 05 yet**. Only Stage 01 has ever made a real AI call.
+contact-sourcing method + schema field (item 5) are locked in at the
+schema/contract level and verified against the mock pipeline — but **no live code
+executes Stage 03, 04, or 05 yet**. Stage 03 (evidence validation) is the next
+stage in sequence and has deliberately **not** been started.
 
-**Still missing entirely:** anything Italy-specific has actually been *researched*
-— the one live run was Spain. EU tender integration and a curated Italian
-news/trade-association source list don't exist. No stage beyond 01 has ever
-produced a real (non-mock) result.
+**Still missing entirely:** LinkedIn access (search-only, as decided), EU tender
+integration, and a curated Italian news/trade-association source list. No stage
+beyond 02 has ever produced a real (non-mock) result.
 
-**Suggested real next step:** wire Stage 02 (candidate discovery) live, the same
-way Stage 01 was — reusing `providers/localCli.mjs` — and run it once against
-Italy to see whether the new `regionFit`/`utilitySize` criteria and the
-`site:linkedin.com`-style contact search actually work in practice before
-building Stages 03–05 on top of unproven assumptions.
+**Suggested real next step (not yet started, by instruction):** wire Stage 03
+(evidence validation) live, the same pattern as Stages 01–02 — it decides which of
+these 10 candidates' supporting evidence actually holds up, using the
+`evidence-standards.md` rules (now including the scope-vs-conflict fix) before
+Stage 04 scores anything.
