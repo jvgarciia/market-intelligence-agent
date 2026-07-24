@@ -207,6 +207,43 @@ roadmap listed them separately.
 
 ---
 
+## 8. ASSUMPTIONS-TO-REVISIT.md (new)
+
+**Status: Done. Tracks assignment-specific decisions for later revisit.**
+
+- [x] `ASSUMPTIONS-TO-REVISIT.md` created at the project root — logs every
+      decision made for the internship assignment rather than genuine
+      production/HULO judgment: the 5 scoring dimensions, `CONTACT_TARGET=30`,
+      `--brief-all` as the default coverage mode, region-specific eval cases,
+      Italy as the fixed country scope, the four target role categories
+      (from the application form, not independent buyer research), the
+      pipeline's NRW-narrow signal tuning, and `contacts-master.md`'s missing
+      outreach-status tracking. Each entry states what it should become once
+      real HULO input exists.
+- [x] Rule going forward: assignment-specific choices get flagged in the
+      moment and logged here, not left implicit.
+- [x] Item 5 (Italy scope) verified against the actual code, not just
+      asserted: grepped `lib/`, `scripts/`, `app/`, `components/`,
+      `workflows/` (schemas included) for `italy`/`italian`. The original
+      claim — "the pipeline itself is not Italy-specific, only the cases are"
+      — didn't hold. Five hardcoded Italy references exist in live
+      prompt-building code and stage contracts outside the case files:
+      `lib/workflow/stage02.mjs`, `lib/workflow/stage04.mjs`,
+      `02_candidate-discovery/CONTEXT.md`, `05_opportunity-brief/CONTEXT.md`,
+      and `references/scoring-rubric.md`'s `regionFit` definition. Schemas
+      are clean (`country` is free text). Corrected in the file with
+      file:line specifics.
+- [x] Separately checked (not just a portability concern): do any of those 5
+      currently cause search tunnel vision within Italy? Only one — the
+      Stage 02 "Italian ATO" example — touches Stage 01/02 search at all
+      (Stage 01 has zero hardcoded Italy text). Cross-checked against real
+      Stage 02 output across three runs: it generalized correctly to a
+      differently-named governance body (`EGATO5`), so no evidence of
+      regional narrowing in practice today — it's a portability issue for a
+      second country, not a current accuracy bug.
+
+---
+
 ## Honest summary
 
 **Genuinely done, tested, and proven on real Italy data — all five stages:**
@@ -227,6 +264,11 @@ national run's 11-contact `--brief-all` pass plus the regional run's 1.
 
 **Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
 (decided against, not a gap), EU tender integration, and a curated Italian
-water-news source list (item 2). The contact target sits at 12/30 — closing
-that gap means running more regions or improving Stage 05's per-run contact
-yield. The Gate 1/Gate 2 CLI gap (item 7) is now closed.
+water-news source list (item 2). The contact target sits at 12/30 — leaning
+toward region-specific eval cases (Sicilia, Calabria, Trentino) over rerunning
+the national case, since a rerun of the same query tends to converge on
+candidates already found rather than surface new ones. The Gate 1/Gate 2 CLI
+gap (item 7) is now closed. Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is new —
+worth checking before any HULO hand-off, since several current defaults
+(scoring dimensions, contact target, target role categories, Italy scope)
+came from the assignment brief, not validated HULO input.
