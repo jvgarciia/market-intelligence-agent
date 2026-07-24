@@ -182,23 +182,28 @@ roadmap listed them separately.
 
 ---
 
-## 7. Review Gate CLI (new — the top identified gap)
+## 7. Review Gate CLI
 
-**Status: Not built. Every gate decision so far has been hand-edited JSON.**
+**Status: Done. `scripts/review-gate.mjs` covers both gates.**
 
 - [x] Stage 01's initial approval has a real CLI: `scripts/review-run.mjs`
       (`npm run workflow:review -- --run <id> --decision approve`)
-- [ ] Gate 1 (after Stage 03) and Gate 2 (after Stage 05) have **no CLI** —
-      every approval recorded in this project so far was done via inline
-      Python/bash editing `metadata.json` and `0X-review-gate.json` directly
-- [ ] This already caused one real bug: `contacts-master.md` would have kept
+- [x] Gate 1 (after Stage 03) and Gate 2 (after Stage 05) now have a CLI:
+      `scripts/review-gate.mjs` (`npm run workflow:review2 -- --run <id> --gate 1|2
+      --decision approve|changes-requested [--note "..."]`, plus `--list` and an
+      interactive mode when `--decision` is omitted). Displays Stage 02/03
+      artifacts for gate 1, Stage 05 briefs + contacts + verification items for
+      gate 2. Writes the decision to `metadata.json → reviewGates.gate<N>`
+      (validated against the `run-metadata` schema before writing) and to
+      `03-review-gate.json` / `05-review-gate.json` — no more hand-edited JSON.
+- [x] This already caused one real bug: `contacts-master.md` would have kept
       unreviewed contacts indefinitely after a run's Gate 2 was reset to pending,
       because nothing forced a consistent, structured way of recording the
-      decision (fixed in `buildContactsMaster.mjs`, but the root cause — no CLI
-      — is still open)
-- [ ] Recommended next step: extend `review-run.mjs`'s pattern (or add
-      `review-gate1.mjs` / `review-gate2.mjs`) so gate decisions are recorded
-      through one code path instead of manual JSON edits every time
+      decision (fixed in `buildContactsMaster.mjs`; the root cause — no CLI —
+      is now also closed)
+- [ ] Not yet done: no test coverage for `review-gate.mjs` itself (matches the
+      existing convention — none of the `scripts/*.mjs` CLI wrappers have unit
+      tests, only the `lib/workflow/*.mjs` modules they call)
 
 ---
 
@@ -220,9 +225,8 @@ briefs with verified-fact/interpretation splits, and `contacts-master.md` with
 are recorded from earlier curated passes but currently superseded by the
 national run's 11-contact `--brief-all` pass plus the regional run's 1.
 
-**Still missing:** a CLI for Gate 1/Gate 2 decisions (item 7 — the most valuable
-next engineering task, since every gate decision so far has been manual JSON
-editing), a CSV/hand-off export (item 6), LinkedIn API/login access (decided
-against, not a gap), EU tender integration, and a curated Italian water-news
-source list (item 2). The contact target sits at 12/30 — closing that gap means
-running more regions or improving Stage 05's per-run contact yield.
+**Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
+(decided against, not a gap), EU tender integration, and a curated Italian
+water-news source list (item 2). The contact target sits at 12/30 — closing
+that gap means running more regions or improving Stage 05's per-run contact
+yield. The Gate 1/Gate 2 CLI gap (item 7) is now closed.
