@@ -9,17 +9,19 @@ It is not documentation for humans. It is the persistent operating system for AI
 
 **Every session must follow this sequence before writing any code:**
 
-1. Read `project_context.md` to understand the current state of the project
+1. Read `project_context.md` AND `todo.md` together, both in full, before any
+   other action — not one first and the other later, not one only if the task
+   seems to need it. Both are read at the start of every session, no exceptions.
 2. Check which files have changed recently if context is unclear (`git log --oneline -10`)
 3. Inspect the relevant files before proposing any changes — do not work from assumptions
 4. Confirm the task fits the product vision and the current learning phase before implementing
 5. State the current architecture and exactly how the proposed change fits into it
 6. List the exact files that will change and what will happen to each one
 7. Wait for user approval before making large, architectural, or multi-file changes
-8. After any major change, update `project_context.md` to reflect the new state
+8. After any major change, update `project_context.md` and `todo.md` to reflect the new state
 
 **Never:**
-- Start coding before reading `project_context.md`
+- Start coding before reading `project_context.md` AND `todo.md`
 - Make architectural changes without stating the reasoning out loud first
 - Propose implementation plans without first reading the files involved
 - Skip phases in the learning roadmap — each concept builds on the previous one
