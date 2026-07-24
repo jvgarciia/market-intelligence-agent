@@ -169,6 +169,47 @@ test('buildContactsMasterContent: preserves a manually-set status on re-run, doe
   }
 });
 
+test('buildContactsMasterContent: drops a contact when its run\'s gate2 flips back to pending', () => {
+  const base = mkdtempSync(join(tmpdir(), 'contacts-'));
+  try {
+    seedRun(base, 'run-a', { gate2: 'approved', candidates: [CAND], briefs: [BRIEF_WITH_CONTACT] });
+    const first = buildContactsMasterContent({ runsDir: base, existingText: '' });
+    assert.equal(first.count, 1);
+
+    // Run gets regenerated (e.g. via --brief-all) and its gate2 is reset to
+    // pending pending re-review — the contact must not linger from before.
+    seedRun(base, 'run-a', { gate2: 'pending', candidates: [CAND], briefs: [BRIEF_WITH_CONTACT] });
+    const second = buildContactsMasterContent({ runsDir: base, existingText: first.content });
+    assert.equal(second.count, 0, 'contact from a no-longer-approved run must be dropped, not linger');
+    assert.ok(!second.content.includes('Jane Doe'));
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('buildContactsMasterContent: a contact reappears (as unverified) if its run is re-approved after being pending', () => {
+  // A dropped contact's prior status is not preserved across the drop — once
+  // it's gone from the table there is nowhere to read the old status from.
+  // This only re-derives membership + status from what's currently in the
+  // file; it does not maintain a separate history.
+  const base = mkdtempSync(join(tmpdir(), 'contacts-'));
+  try {
+    seedRun(base, 'run-a', { gate2: 'approved', candidates: [CAND], briefs: [BRIEF_WITH_CONTACT] });
+    const first = buildContactsMasterContent({ runsDir: base, existingText: '' });
+
+    seedRun(base, 'run-a', { gate2: 'pending', candidates: [CAND], briefs: [BRIEF_WITH_CONTACT] });
+    const dropped = buildContactsMasterContent({ runsDir: base, existingText: first.content });
+    assert.equal(dropped.count, 0);
+
+    seedRun(base, 'run-a', { gate2: 'approved', candidates: [CAND], briefs: [BRIEF_WITH_CONTACT] });
+    const restored = buildContactsMasterContent({ runsDir: base, existingText: dropped.content });
+    assert.equal(restored.count, 1);
+    assert.ok(restored.content.includes('| unverified |'));
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
 test('buildContactsMasterContent: respects a custom contactTarget', () => {
   const base = mkdtempSync(join(tmpdir(), 'contacts-'));
   try {

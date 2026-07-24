@@ -54,6 +54,8 @@ Each phase of this project is designed to teach a specific AI engineering concep
 
 `contacts-master.md` regenerated: **14/30 contacts** (up from 3), all correctly deduped by name+company — no manual status was lost. Since the source run's gate2 status is stale (see caveat above), these 11 new contacts are technically drawn from unreviewed content even though the file currently reads as approved.
 
+**Resolved:** chose to keep the `--brief-all` version and reset `reviewGates.gate2` to `"pending"` for that run (recorded in `05-review-gate.json`) rather than restore the curated backup — the 14-brief version now needs its own Gate 2 review before approval. This exposed a real bug in `lib/buildContactsMaster.mjs`: the original merge-only-add logic would have left the 11 unreviewed contacts sitting in `contacts-master.md` forever, since it never re-checked whether a contact's source run was *still* approved — it just kept every row it had ever seen. Fixed: membership is now recomputed from the current set of gate2-approved runs on every build; only each row's `status` carries over from the previous file (so a manual "verified" edit survives while the run stays approved, but a contact from a run that flips back to pending is dropped, not left stale). Regenerated: **1/30 contacts** (only the regional run's Andrea Aliscioni — the national run's contacts will return once its `--brief-all` briefs pass a real Gate 2 review). 217 tests passing (2 new, covering the flip-to-pending and re-approval cases).
+
 ---
 
 ## Product Vision
