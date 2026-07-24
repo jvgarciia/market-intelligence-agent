@@ -6,11 +6,11 @@
  *
  * Coverage:
  *   stage05:          buildSystemPrompt, buildUserMessage, parseAndValidateOutput,
- *                     renderBriefsMarkdown
+ *                     renderBriefsMarkdown, filterCandidatesSurvivingValidation
  *   runStage05Local:  approval + Stage-04-completed preconditions, artifact
  *                     writing (json + markdown), metadata update, stage
  *                     failure handling, no-briefs result, WebSearch-only tool
- *                     restriction
+ *                     restriction, --brief-all threading
  */
 
 import { test } from 'node:test';
@@ -25,6 +25,8 @@ import {
   loadStageContext,
   parseAndValidateOutput,
   renderBriefsMarkdown,
+  filterCandidatesSurvivingValidation,
+  runStage05,
 } from '../lib/workflow/stage05.mjs';
 
 import { runStage05Local } from '../lib/workflow/runStage05Local.mjs';
@@ -237,13 +239,121 @@ test('renderBriefsMarkdown: shows "none" for a brief with no contacts', () => {
   assert.ok(md.includes('Contacts found:** none'));
 });
 
+// ─── stage05: filterCandidatesSurvivingValidation ────────────────────────────
+
+const SURVIVING_CANDIDATE = { ...VALID_CANDIDATE, candidateId: 'cand-1' };
+const NON_SURVIVING_CANDIDATE = {
+  ...VALID_CANDIDATE,
+  candidateId: 'cand-2',
+  relevanceEvidence: [{ claim: 'Unsupported claim.', signalIds: ['sig-9'], sourceIds: ['src-9'] }],
+};
+
+test('filterCandidatesSurvivingValidation: keeps a candidate whose sourceId is validated', () => {
+  const result = filterCandidatesSurvivingValidation([SURVIVING_CANDIDATE], [VALID_VALIDATED_EVIDENCE]);
+  assert.equal(result.length, 1);
+  assert.equal(result[0].candidateId, 'cand-1');
+});
+
+test('filterCandidatesSurvivingValidation: drops a candidate whose sourceId was never validated', () => {
+  const result = filterCandidatesSurvivingValidation([NON_SURVIVING_CANDIDATE], [VALID_VALIDATED_EVIDENCE]);
+  assert.equal(result.length, 0);
+});
+
+test('filterCandidatesSurvivingValidation: mixed list keeps only the surviving candidate', () => {
+  const result = filterCandidatesSurvivingValidation(
+    [SURVIVING_CANDIDATE, NON_SURVIVING_CANDIDATE], [VALID_VALIDATED_EVIDENCE]
+  );
+  assert.deepEqual(result.map((c) => c.candidateId), ['cand-1']);
+});
+
+test('filterCandidatesSurvivingValidation: empty validated list keeps nothing', () => {
+  assert.deepEqual(filterCandidatesSurvivingValidation([SURVIVING_CANDIDATE], []), []);
+});
+
+// ─── stage05: briefAll threading (prompts + runStage05) ──────────────────────
+
+test('buildSystemPrompt: default mode says "Select the strongest-scored"', () => {
+  const sp = buildSystemPrompt();
+  assert.ok(sp.includes('Select the strongest-scored'));
+});
+
+test('buildSystemPrompt: briefAll mode says to brief EVERY candidate', () => {
+  const sp = buildSystemPrompt({ briefAll: true });
+  assert.ok(sp.includes('EVERY candidate'));
+});
+
+test('buildUserMessage: briefAll mode states every candidate must be briefed', () => {
+  const ctx = loadStageContext();
+  const msg = buildUserMessage(
+    REQUEST, ctx, [VALID_CANDIDATE], [VALID_VALIDATED_EVIDENCE], [VALID_SCORE], 'r1', '2026-01-01T00:00:00Z', { briefAll: true }
+  );
+  assert.ok(msg.includes('--brief-all mode'));
+});
+
+test('runStage05: briefAll mode only sends surviving candidates to the provider', async () => {
+  let capturedUserMessage = null;
+  const provider = {
+    generate: async (params) => {
+      capturedUserMessage = params.userMessage;
+      return {
+        content: JSON.stringify({ briefs: [] }),
+        structuredOutput: { briefs: [] },
+        provider: 'local-cli', model: 'sonnet', executionMode: 'local-cli',
+        startedAt: '2026-07-23T00:00:00Z', completedAt: '2026-07-23T00:01:00Z', latencyMs: 5000,
+        usage: { inputTokens: 'not_available', outputTokens: 'not_available' },
+        toolActivity: 'not_available', warnings: [], rawProviderOutput: { exitCode: 0 },
+        estimatedApiCost: 'not_applicable', subscriptionUsage: 'not_available',
+      };
+    },
+  };
+  await runStage05(
+    { ...REQUEST, runId: 'run-test' },
+    [SURVIVING_CANDIDATE, NON_SURVIVING_CANDIDATE],
+    [VALID_VALIDATED_EVIDENCE],
+    [],
+    provider,
+    { briefAll: true }
+  );
+  assert.ok(capturedUserMessage.includes('cand-1'), 'surviving candidate must be in the prompt');
+  assert.ok(!capturedUserMessage.includes('"cand-2"'), 'non-surviving candidate must be excluded from the prompt');
+});
+
+test('runStage05: default (curated) mode sends every candidate to the provider unfiltered', async () => {
+  let capturedUserMessage = null;
+  const provider = {
+    generate: async (params) => {
+      capturedUserMessage = params.userMessage;
+      return {
+        content: JSON.stringify({ briefs: [] }),
+        structuredOutput: { briefs: [] },
+        provider: 'local-cli', model: 'sonnet', executionMode: 'local-cli',
+        startedAt: '2026-07-23T00:00:00Z', completedAt: '2026-07-23T00:01:00Z', latencyMs: 5000,
+        usage: { inputTokens: 'not_available', outputTokens: 'not_available' },
+        toolActivity: 'not_available', warnings: [], rawProviderOutput: { exitCode: 0 },
+        estimatedApiCost: 'not_applicable', subscriptionUsage: 'not_available',
+      };
+    },
+  };
+  await runStage05(
+    { ...REQUEST, runId: 'run-test' },
+    [SURVIVING_CANDIDATE, NON_SURVIVING_CANDIDATE],
+    [VALID_VALIDATED_EVIDENCE],
+    [],
+    provider
+  );
+  assert.ok(capturedUserMessage.includes('cand-1'));
+  assert.ok(capturedUserMessage.includes('cand-2'), 'default mode must not filter candidates');
+});
+
 // ─── runStage05Local: orchestration ──────────────────────────────────────────
 
 function makeMockProvider(overrides = {}) {
   let capturedTools = null;
+  let capturedUserMessage = null;
   const provider = {
     generate: async (params) => {
       capturedTools = params.tools;
+      capturedUserMessage = params.userMessage;
       return {
         content: JSON.stringify({ briefs: [VALID_BRIEF('run-x')] }),
         structuredOutput: { briefs: [VALID_BRIEF('run-x')] },
@@ -264,6 +374,7 @@ function makeMockProvider(overrides = {}) {
     },
   };
   provider.getCapturedTools = () => capturedTools;
+  provider.getCapturedUserMessage = () => capturedUserMessage;
   return provider;
 }
 
@@ -354,6 +465,30 @@ test('runStage05Local: calls the provider with tools: ["WebSearch"] only', async
     seedRun(base, 'run-tools');
     await runStage05Local('run-tools', { baseDir: base, _provider: provider });
     assert.deepEqual(provider.getCapturedTools(), ['WebSearch'], 'must not request WebFetch');
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('runStage05Local: threads options.briefAll through to the prompt', async () => {
+  const base = mkdtempSync(join(tmpdir(), 'stage05-'));
+  const provider = makeMockProvider();
+  try {
+    seedRun(base, 'run-brief-all');
+    await runStage05Local('run-brief-all', { baseDir: base, _provider: provider, briefAll: true });
+    assert.ok(provider.getCapturedUserMessage().includes('--brief-all mode'));
+  } finally {
+    rmSync(base, { recursive: true, force: true });
+  }
+});
+
+test('runStage05Local: default (no briefAll) uses curated-mode prompt language', async () => {
+  const base = mkdtempSync(join(tmpdir(), 'stage05-'));
+  const provider = makeMockProvider();
+  try {
+    seedRun(base, 'run-curated');
+    await runStage05Local('run-curated', { baseDir: base, _provider: provider });
+    assert.ok(provider.getCapturedUserMessage().includes('Select the strongest-scored'));
   } finally {
     rmSync(base, { recursive: true, force: true });
   }

@@ -27,6 +27,12 @@ from what is **interpreted**, and naming what a human must confirm.
 
 # Process
 1. Select the top opportunities by `totalScore` (and reviewer judgement later).
+   This is the default, curated mode. An operator can instead pass
+   `--brief-all` (`npm run workflow:stage05 -- --run <id> --brief-all`) to
+   brief every candidate that survives Stage 03 validation — i.e. has at
+   least one relevanceEvidence sourceId also cited as a supportingSourceId by
+   a validated evidence item — regardless of score. This changes step 1's
+   selection only; steps 2-5 below apply identically either way.
 2. For each, write a brief: `whyItMatters`, `supportingEvidenceIds`,
    `uncertainties`, `recommendedNextAction`, and `humanVerificationRequired`.
 3. Fill `factVsInterpretation`: list `verifiedFacts` (backed by validated
