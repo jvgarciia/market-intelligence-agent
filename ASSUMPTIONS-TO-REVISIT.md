@@ -89,10 +89,51 @@ dimension (scores 0 for "outside Italy").
 **What was decided:** Italy-only scope came from the internship assignment,
 not from HULO's actual target-market prioritization across countries.
 
+**Correction (verified by grep, see below):** this item originally claimed
+"the pipeline itself is not Italy-specific, only the cases run so far are."
+That's **not fully true** — `targetMarket`/`targetCustomerType` are genuine
+run parameters, so the pipeline *can* run for another country, but Italy is
+hardcoded into several places that feed every run's live prompt, not just
+the case files:
+
+- `lib/workflow/stage02.mjs:140` — Stage 02's prompt-building code includes
+  a fixed example, "(e.g. an Italian ATO)", inside the `organisationType`
+  scope-rule instructions sent to the model on every run.
+- `lib/workflow/stage04.mjs:85` — Stage 04's prompt-building code includes a
+  fixed example score object with the justification "Confirmed Italian
+  operator per ev-1", sent to the model on every run.
+- `workflows/market-opportunity/02_candidate-discovery/CONTEXT.md:47` — the
+  Stage 02 stage contract (loaded verbatim into the live prompt for every
+  run) defines `public-water-organisation` using "an Italian ATO/Ente di
+  Governo dell'Ambito" as its example.
+- `workflows/market-opportunity/05_opportunity-brief/CONTEXT.md:22` — the
+  Stage 05 stage contract lists "Italian water-sector trade-association
+  member listings" as one of the approved contact-search methods, for
+  every run regardless of `targetMarket`.
+- `workflows/market-opportunity/references/scoring-rubric.md` (loaded into
+  every Stage 04 prompt) — the `regionFit` dimension's definition names
+  Italy directly: *"Does this organisation operate in the target region —
+  Italy (all regions unless a specific list is later prioritized)?"* This is
+  the most significant one: `regionFit` isn't actually parameterized by the
+  run's `targetMarket`, it's textually Italy by default.
+
+(`workflows/market-opportunity/references/evidence-standards.md` also has one
+Italy-flavored example — a Lombardia-vs-Italy scope-conflict illustration —
+but that's a genuinely general worked example of the scope-before-conflict
+rule, not a hardcoded constraint, so it's not counted as a finding here.)
+
+Schemas themselves (`workflows/market-opportunity/*/schemas/*.json`,
+`references/schemas/*.json`) have no hardcoded Italy references — `country`
+is free text there, confirmed clean by grep.
+
 **Revisit once real HULO input exists:** Confirm Italy is actually HULO's
-top-priority market before investing further in Italy-specific case files,
-source lists, or region breakdowns — the pipeline itself is not Italy-specific
-(`targetMarket` is a run parameter), only the cases run so far are.
+top-priority market before investing further in Italy-specific case files.
+Separately — and regardless of that answer — the prompt-embedded examples
+above and the `regionFit` rubric text should be genericized (parameterized
+off `targetMarket` rather than hardcoded to Italy) before the pipeline is
+run for a second country, or a non-Italy run will silently inherit
+Italy-flavored few-shot examples and a rubric dimension that still asks the
+model to confirm an "Italian operator."
 
 ---
 
