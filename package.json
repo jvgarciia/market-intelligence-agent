@@ -15,6 +15,7 @@
     "workflow:stage04": "node scripts/run-stage04-local.mjs",
     "workflow:stage05": "node scripts/run-stage05-local.mjs",
     "workflow:review": "node scripts/review-run.mjs",
+    "contacts:build": "node scripts/build-contacts-master.mjs",
     "eval:mock": "node scripts/run-eval.mjs",
     "eval:live": "node scripts/run-eval-live.mjs",
     "eval:local-stage01": "node scripts/run-eval-local-stage01.mjs",
