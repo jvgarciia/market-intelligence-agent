@@ -64,3 +64,8 @@ ranking aid, not a verdict. Ties and close scores are expected; the brief
   guess a 4.
 - A low `momentumSignal` score is not a red flag on its own — do not let it drag
   down the overall read of an otherwise well-evidenced candidate.
+- **Distress ≠ momentum.** A candidate's debt, losses, or financial strain caused
+  by unresolved water issues is *context*, not a positive `nrwEvidence` or
+  `momentumSignal` signal — score those dimensions on whether there's an active,
+  named response (investment, programme, regulatory mandate), not on the
+  severity of the underlying problem.

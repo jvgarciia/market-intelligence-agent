@@ -2,9 +2,9 @@
 
 Consolidated from every Review-Gate-2-approved run. Contacts here are informational only — nothing in this file triggers or implies outreach; each row still needs human verification before any use.
 
-**Contacts found: 12 / 30 (target)**
+**Contacts found: 16 / 30 (target)**
 
-Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872
+Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea
 
 | Name | Role | Company | Region | Source | Source Type | Status |
 |------|------|---------|--------|--------|--------------|--------|
@@ -20,3 +20,7 @@ Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08
 | Giovanni Celani | Direttore Generale (confirmed/renewed) | CIIP SpA (Cicli Integrati Impianti Primari) | Marche / Abruzzo | https://veratv.it/articoli/id-32837/ascoli-piceno---giovanni-celani-confermato-direttore-generale-della-ciip | press-mention | unverified |
 | Ezio Nini | Direttore Generale (appointed 25 October 2023, effective 20 November 2023) | Uniacque S.p.A. | Lombardia (Bergamo) | https://www.uniacque.bg.it/amministrazione-trasparente/personale/incarico-direttore-generale/ | company-team-page | unverified |
 | Enrico Pochettino | Direttore Innovazione (Director of Innovation) | Gruppo Iren | Piemonte / Liguria / Emilia-Romagna | https://www.linkedin.com/in/enrico-pochettino-772b478/ | linkedin-search | unverified |
+| Massimo Burruano | Dirigente operazioni | Siciliacque S.p.A. | Sicilia | https://www.linkedin.com/in/massimo-burruano-809229176/ | linkedin-search | unverified |
+| Davide Maimone | Direttore Generale | AMAM S.p.A. (Azienda Meridionale Acque Messina) | Sicilia (Messina) | https://www.messinaindiretta.it/messina-davide-maimone-nominato-direttore-generale-dellamam/ | press-mention | unverified |
+| Pierluigi Carugno | Direttore Generale | ATI Trapani (Assemblea Territoriale Idrica di Trapani), formerly ATO Idrico n°7 Trapani | Sicilia (Trapani province) | https://www.trapanisi.it/ati-trapani-revocato-il-commissariamento-regionale-si-apre-fase-decisiva-per-il-servizio-idrico/ | press-mention | unverified |
+| Bartolo Giaquinta | Presidente (Sindaco di Giarratana) | ATI Ragusa (Assemblea Territoriale Idrica di Ragusa) | Sicilia (Ragusa province) | https://www.ildomanibleo.com/2026/06/19/ati-ragusa-progetti-bocciati-dalla-regione-mauro-chiede-il-commissariamento-la-replica-di-giaquinta/ | press-mention | unverified |

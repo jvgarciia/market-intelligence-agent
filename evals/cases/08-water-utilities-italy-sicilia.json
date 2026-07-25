@@ -1,0 +1,35 @@
+{
+  "id": "08-water-utilities-italy-sicilia",
+  "title": "Drinking-water and multi-utility companies in Sicilia",
+  "category": "Single-region market — HULO.ai ICP, new region for contact growth",
+  "input": {
+    "targetMarket": "Italy",
+    "targetCustomerType": "drinking-water utilities and multi-utility companies",
+    "solutionDescription": "AI leak-detection and water-network monitoring software",
+    "businessObjective": "Identify Italian water organisations actively working on NRW (non-revenue water) or leak reduction and network modernization, to shortlist for outbound marketing and eventually contact",
+    "constraints": [
+      "Italy only, focus specifically on Sicilia (the ATO idrico bodies, Siciliacque, AMAP, and municipal/provincial water operators serving Sicily)",
+      "prioritise organisations with an active, named NRW or leak-reduction initiative over generic efficiency mentions"
+    ]
+  },
+  "expectedCharacteristics": {
+    "marketSignals": [
+      "Should surface NRW / leak reduction as a real, named problem area — not just generic 'efficiency'",
+      "Should look for Italian national or EU regulation, funding programmes (including PNRR), and tenders tied to network modernization in Sicilia specifically",
+      "Signals must each carry a source and a date where a date is expected",
+      "Should include organisation-scale signals (population served, network length) for named organisations"
+    ],
+    "candidates": [
+      "Real, identifiable Sicilian water utilities and multi-utility companies (regional, provincial, or municipal)",
+      "organisationType should be from the allowed enum, including multi-utility-company where applicable",
+      "Each candidate must carry relevance evidence, not just a name"
+    ],
+    "mustAvoid": [
+      "Inventing utilities that cannot be sourced",
+      "Confusing bottled-water brands with network/utility operators",
+      "Any outreach or contact instruction in recommendations"
+    ],
+    "sourceExpectations": "Prefer Tier A/B (Italian regulators, ARERA, official Sicilian ATO/utility sites, trade press) over promotional vendor pages"
+  },
+  "notes": "New region to grow contact count toward the 30-contact target — avoids rerunning the national/regional cases already found in 06/07, which tend to resurface the same candidates."
+}

@@ -135,18 +135,21 @@ roadmap listed them separately.
       Stage 04 completion
 - [x] `--brief-all` flag: briefs every candidate that survives Stage 03 validation
       instead of the model's curated top-pick subset — default behavior unchanged
-- [x] **Run three times against real data**, found 1, 2, and 11 real contacts
-      respectively (curated regional, curated national, brief-all national) — 14
-      total real contacts found across all runs so far
+- [x] **Run four times against real data**, found 1, 2, 11, and 5 real contacts
+      respectively (curated regional, curated national, brief-all national,
+      brief-all Sicilia) — 19 total real contacts found across all runs so far
+      (16 unique after cross-run dedup)
 - [x] The model has demonstrated the honesty behavior the contract asks for:
       caught and excluded its own risky contact misattribution (a name that
       matched a different company) rather than guess
 - [x] `contacts-master.md` consolidator (`lib/buildContactsMaster.mjs`,
       `npm run contacts:build`) rolls contacts from every Gate-2-**approved** run
-      into one table — dedupes by name+company, preserves manually-set `verified`
+      into one table — dedupes by name+company (ignoring any parenthetical
+      qualifier on the company name, fixed 2026-07-25 after a real cross-run
+      double-count — see Project History), preserves manually-set `verified`
       status, and correctly drops a contact if its source run's Gate 2 is reset to
-      pending (found and fixed a real bug here — see Project History 2026-07-24)
-- [x] **Current total: 12/30 contacts** toward the target, from 2 approved runs
+      pending (found and fixed a real bug here too — see Project History 2026-07-24)
+- [x] **Current total: 16/30 contacts** toward the target, from 3 approved runs
 - [ ] Still true: LinkedIn has no API/login access — approved methods are all
       public-search-result-only, which caps yield. This is a deliberate,
       documented scope decision, not an oversight
@@ -249,24 +252,26 @@ roadmap listed them separately.
 **Genuinely done, tested, and proven on real Italy data — all five stages:**
 Stage 01 (market signals) through Stage 05 (opportunity briefs + contacts) each
 have live execution paths, are gated on the right approvals, and have run
-successfully multiple times against the real target market — both at regional
-scale (Lombardia/Lazio, 6 candidates) and national scale (all of Italy, 14
-candidates). Both Review Gates have been exercised for real, including one
-genuine correction a human caught that the pipeline had no way to catch itself
-(a funding figure that was internally consistent but simply wrong). 217 tests
-passing throughout.
+successfully multiple times against the real target market — regional scale
+(Lombardia/Lazio, 6 candidates; Sicilia, 7 candidates) and national scale (all
+of Italy, 14 candidates). Both Review Gates have been exercised for real,
+including two genuine corrections a human caught that the pipeline had no way
+to catch itself (a funding figure that was internally consistent but simply
+wrong; an opportunity brief that was too conservative about a plan's named
+funding categories). 217 tests passing throughout.
 
-**Real product output exists:** two Gate-2-approved runs, real opportunity
+**Real product output exists:** three Gate-2-approved runs, real opportunity
 briefs with verified-fact/interpretation splits, and `contacts-master.md` with
-12 real, sourced contacts (of the 30 targeted) — Paolo Lanza and Daniele Granato
-are recorded from earlier curated passes but currently superseded by the
-national run's 11-contact `--brief-all` pass plus the regional run's 1.
+16 real, sourced, deduplicated contacts (of the 30 targeted) — up from 12
+after the Sicilia run added 5 more (one, Giovanni Sciortino, was already
+present from an earlier run and correctly deduplicated after fixing a
+cross-run company-name-matching bug in `buildContactsMaster.mjs`).
 
 **Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
 (decided against, not a gap), EU tender integration, and a curated Italian
-water-news source list (item 2). The contact target sits at 12/30 — leaning
-toward region-specific eval cases (Sicilia, Calabria, Trentino) over rerunning
-the national case, since a rerun of the same query tends to converge on
+water-news source list (item 2). The contact target sits at 16/30 — next
+candidates for a regional run are Calabria or Trentino, since Sicilia is now
+covered and a rerun of an already-covered region tends to converge on
 candidates already found rather than surface new ones. The Gate 1/Gate 2 CLI
 gap (item 7) is now closed. Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is new —
 worth checking before any HULO hand-off, since several current defaults
