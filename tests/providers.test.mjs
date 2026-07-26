@@ -57,13 +57,39 @@ const VALID_SIGNAL = (runId = 'run-test') => ({
   metadata: { runId, stage: 'market-signals', createdAt: '2026-06-15T00:00:00Z' },
 });
 
+// The real CLI (--output-format json) wraps the model's answer in an
+// envelope; `resultOverride` sets envelope.result, `overrides` patches the
+// spawnSync-level result (status, stderr, etc.) or envelope fields directly.
+function makeEnvelope(resultOverride, envelopeOverrides = {}) {
+  return {
+    type: 'result',
+    subtype: 'success',
+    is_error: false,
+    num_turns: 1,
+    result: resultOverride ?? JSON.stringify({ sources: [VALID_SOURCE], signals: [VALID_SIGNAL()] }),
+    usage: {
+      input_tokens: 10,
+      output_tokens: 20,
+      // Deliberately 0 here even in tests that simulate a search having
+      // happened — this field is always 0 for the CLI's own WebSearch tool;
+      // the real count lives in modelUsage below.
+      server_tool_use: { web_search_requests: 0, web_fetch_requests: 0 },
+    },
+    modelUsage: {
+      'claude-haiku-4-5-20251001': { webSearchRequests: 0 },
+    },
+    ...envelopeOverrides,
+  };
+}
+
 function makeSpawnFn(overrides = {}) {
+  const { stdout, ...rest } = overrides;
   return () => ({
     status: 0,
-    stdout: JSON.stringify({ sources: [VALID_SOURCE], signals: [VALID_SIGNAL()] }),
+    stdout: stdout !== undefined ? stdout : JSON.stringify(makeEnvelope()),
     stderr: '',
     error: null,
-    ...overrides,
+    ...rest,
   });
 }
 
@@ -137,10 +163,62 @@ test('generate: returns structuredOutput on valid JSON response', async () => {
   assert.ok(result.structuredOutput);
   assert.ok(Array.isArray(result.structuredOutput.sources));
   assert.ok(Array.isArray(result.structuredOutput.signals));
-  assert.equal(result.usage.inputTokens, 'not_available');
-  assert.equal(result.toolActivity, 'not_available');
+  assert.equal(result.usage.inputTokens, 10);
+  assert.equal(result.usage.outputTokens, 20);
+  assert.equal(result.toolActivity.webSearchRequests, 0);
+  assert.equal(result.toolActivity.webFetchRequests, 'not_available');
+  assert.equal(result.toolActivity.numTurns, 1);
   assert.equal(result.estimatedApiCost, 'not_applicable');
   assert.equal(result.subscriptionUsage, 'not_available');
+});
+
+test('generate: surfaces real search-call counts from modelUsage, not server_tool_use', async () => {
+  // server_tool_use.web_search_requests is always 0 for the CLI's own
+  // WebSearch tool (verified against the real CLI) — the true count is in
+  // modelUsage, summed across whichever model(s) actually ran searches.
+  const envelope = makeEnvelope(undefined, {
+    usage: {
+      input_tokens: 5,
+      output_tokens: 15,
+      server_tool_use: { web_search_requests: 0, web_fetch_requests: 0 },
+    },
+    modelUsage: {
+      'claude-haiku-4-5-20251001': { webSearchRequests: 3 },
+      'claude-sonnet-5': { webSearchRequests: 1 },
+    },
+    num_turns: 6,
+  });
+  const result = await localCliGenerate(
+    { userMessage: 'test' },
+    { spawnFn: makeSpawnFn({ stdout: JSON.stringify(envelope) }) }
+  );
+  assert.equal(result.toolActivity.webSearchRequests, 4, 'should sum across all models in modelUsage');
+  assert.equal(result.toolActivity.webFetchRequests, 'not_available', 'no CLI field exposes this');
+  assert.equal(result.toolActivity.numTurns, 6);
+});
+
+test('generate: webSearchRequests falls back to not_available when modelUsage is absent', async () => {
+  const envelope = makeEnvelope(undefined, { modelUsage: undefined });
+  const result = await localCliGenerate(
+    { userMessage: 'test' },
+    { spawnFn: makeSpawnFn({ stdout: JSON.stringify(envelope) }) }
+  );
+  assert.equal(result.toolActivity.webSearchRequests, 'not_available');
+});
+
+test('generate: throws a clear error when the CLI envelope reports is_error', async () => {
+  const envelope = makeEnvelope('', { is_error: true, subtype: 'error' });
+  await assert.rejects(
+    () => localCliGenerate({ userMessage: 'test' }, { spawnFn: makeSpawnFn({ stdout: JSON.stringify(envelope) }) }),
+    /CLI reported an error result/
+  );
+});
+
+test('generate: throws a clear error when stdout is not a valid JSON envelope', async () => {
+  await assert.rejects(
+    () => localCliGenerate({ userMessage: 'test' }, { spawnFn: makeSpawnFn({ stdout: 'not json at all' }) }),
+    /could not parse --output-format json envelope/
+  );
 });
 
 test('generate: records latency', async () => {
@@ -190,17 +268,18 @@ test('generate: surfaces stdout on non-zero exit, not just stderr', async () => 
 
 // ─── generate: malformed output ───────────────────────────────────────────────
 
-test('generate: returns warning and null structuredOutput for non-JSON response', async () => {
-  const badSpawn = makeSpawnFn({ stdout: 'This is plain text, not JSON.' });
+test('generate: returns warning and null structuredOutput when envelope.result is not JSON', async () => {
+  const envelope = makeEnvelope('This is plain text, not JSON.');
+  const badSpawn = makeSpawnFn({ stdout: JSON.stringify(envelope) });
   const result = await localCliGenerate({ userMessage: 'test' }, { spawnFn: badSpawn });
   assert.equal(result.structuredOutput, null);
   assert.ok(result.warnings.length > 0, 'should have a warning about JSON extraction');
   assert.ok(result.content.includes('plain text'), 'content should preserve raw text');
 });
 
-test('generate: extracts JSON even when there is leading text', async () => {
-  const stdout = 'Here is the result:\n' + JSON.stringify({ sources: [], signals: [] });
-  const result = await localCliGenerate({ userMessage: 'test' }, { spawnFn: makeSpawnFn({ stdout }) });
+test('generate: extracts JSON even when envelope.result has leading text', async () => {
+  const envelope = makeEnvelope('Here is the result:\n' + JSON.stringify({ sources: [], signals: [] }));
+  const result = await localCliGenerate({ userMessage: 'test' }, { spawnFn: makeSpawnFn({ stdout: JSON.stringify(envelope) }) });
   assert.ok(result.structuredOutput);
   assert.ok(Array.isArray(result.structuredOutput.sources));
 });
@@ -515,7 +594,7 @@ function captureSpawnFn(overrides = {}) {
     capturedArgs = args;
     return {
       status: 0,
-      stdout: JSON.stringify({ sources: [VALID_SOURCE], signals: [VALID_SIGNAL()] }),
+      stdout: JSON.stringify(makeEnvelope()),
       stderr: '',
       error: null,
       ...overrides,
