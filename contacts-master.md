@@ -2,9 +2,9 @@
 
 Consolidated from every Review-Gate-2-approved run. Contacts here are informational only — nothing in this file triggers or implies outreach; each row still needs human verification before any use.
 
-**Contacts found: 16 / 30 (target)**
+**Contacts found: 17 / 30 (target)**
 
-Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea
+Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea, 2026-07-26T10-37-38-791Z__705731b4, 2026-07-26T12-50-05-944Z__a7c6658d
 
 | Name | Role | Company | Region | Source | Source Type | Status |
 |------|------|---------|--------|--------|--------------|--------|
@@ -24,3 +24,4 @@ Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08
 | Davide Maimone | Direttore Generale | AMAM S.p.A. (Azienda Meridionale Acque Messina) | Sicilia (Messina) | https://www.messinaindiretta.it/messina-davide-maimone-nominato-direttore-generale-dellamam/ | press-mention | unverified |
 | Pierluigi Carugno | Direttore Generale | ATI Trapani (Assemblea Territoriale Idrica di Trapani), formerly ATO Idrico n°7 Trapani | Sicilia (Trapani province) | https://www.trapanisi.it/ati-trapani-revocato-il-commissariamento-regionale-si-apre-fase-decisiva-per-il-servizio-idrico/ | press-mention | unverified |
 | Bartolo Giaquinta | Presidente (Sindaco di Giarratana) | ATI Ragusa (Assemblea Territoriale Idrica di Ragusa) | Sicilia (Ragusa province) | https://www.ildomanibleo.com/2026/06/19/ati-ragusa-progetti-bocciati-dalla-regione-mauro-chiede-il-commissariamento-la-replica-di-giaquinta/ | press-mention | unverified |
+| Matteo Frisinghelli | Responsabile Operativo Servizio Idrico (Operational Water Service Manager) | Novareti S.p.A. | Trentino-Alto Adige (Province of Trento) | https://www.linkedin.com/in/matteo-frisinghelli-0414bb229/ | linkedin-search | unverified |

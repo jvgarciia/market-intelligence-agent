@@ -49,6 +49,28 @@ lead-gen run, they are not candidates.
   remit, does not qualify under any `organisationType` — leave it out rather
   than force-fitting it into the closest-sounding type.
 
+## Parent/subsidiary entity-scope rule
+- When signals describe two entities under the same corporate group where one
+  is the customer-facing **operating company** (runs the network day to day,
+  owns the leak-reduction problem and the budget/decision around solving it)
+  and the other is an **infrastructure/network-holding company** (owns the
+  physical assets on the parent group's behalf but has no independent
+  customer-facing operations of its own), emit only the operating company as
+  a candidate. The holding company is not a separate lead — note the
+  ownership/group relationship in the operating company's `uncertainty` or
+  `relevanceEvidence` instead of creating a second candidate for it.
+- Example pattern (do not assume these exact names apply outside the signals
+  that name them): an operating company like "Novareti S.p.A." runs
+  captazione/potabilizzazione/distribuzione and is the real buyer-side
+  candidate; a same-group entity like "Dolomiti Reti S.p.A." that holds the
+  network assets is not a second candidate for the same territory.
+- If the signals genuinely leave it unclear which entity is operating vs.
+  holding, keep a single candidate (the one with clearer customer-facing/
+  operational evidence) and flag the ambiguity in `uncertainty` — do not
+  emit both "to be safe." Two entities under one group is a duplicate risk,
+  not two leads, unless there is direct evidence they serve genuinely
+  different territories or customer bases.
+
 # Output schema
 - `02-candidates.json` — array of `candidate-organisation`.
 

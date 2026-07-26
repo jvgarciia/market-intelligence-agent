@@ -42,6 +42,28 @@ Before recording two figures as **conflicting** (and lowering confidence for it)
 A false "conflict" needlessly caps confidence and buries two individually
 useful, individually true facts inside one unnecessary hedge.
 
+## Same-fact consistency across restatements
+
+The same underlying fact can appear more than once — as an individual Stage 01
+signal, as part of a bundled multi-fact claim in a candidate's
+`relevanceEvidence`, or reworded across both. Judge the underlying fact and its
+actual source support **once**, and apply that same outcome everywhere the fact
+reappears — regardless of phrasing or how many other facts it is bundled with.
+
+- If an individual restatement of a fact would be rejected on its own merits
+  (`weak-evidence`, `outdated`, `unsupported-assumption`, etc. — same sources,
+  same underlying claim), a bundled claim that restates that same fact using
+  the same sources **inherits the rejection** for that fact. Bundling several
+  facts into one combined claim must never dilute or bypass a rejection that
+  would apply to any of its individual parts.
+- A bundled claim may still be validated for the parts that ARE independently
+  well-supported. When in doubt, split it: keep the supported portion, reject
+  the unsupported portion — do not validate or reject the whole bundle
+  uniformly just because it is one item.
+- This is not about penalizing paraphrasing. It is about not letting the same
+  weak evidence "pass" simply because it was phrased differently or grouped
+  with stronger facts the second time it appears.
+
 ## Rejection reasons (the only allowed values)
 
 Use exactly one of these for `rejectionReason`:

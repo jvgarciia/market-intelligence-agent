@@ -21,7 +21,7 @@ scaffolding-only or fully missing.
 - [x] Human review gates (Gate 1 after Stage 03, Gate 2 after Stage 05) — both work,
       **but only via hand-edited JSON**; `scripts/review-run.mjs` only covers Stage 01's
       initial approval, not gates 1/2 (see item 7, the top open gap)
-- [x] Evaluation harness — 7 realistic eval cases, mock-safe, zero paid API calls (`evals/`)
+- [x] Evaluation harness — 9 realistic eval cases, mock-safe, zero paid API calls (`evals/`)
 - [x] Local Claude Code provider — runs live web research on your subscription, not
       metered API billing (`lib/workflow/providers/localCli.mjs`)
 - [x] Hard safety rule: no stage may emit outreach language (email/LinkedIn/contact/
@@ -149,12 +149,28 @@ roadmap listed them separately.
       double-count — see Project History), preserves manually-set `verified`
       status, and correctly drops a contact if its source run's Gate 2 is reset to
       pending (found and fixed a real bug here too — see Project History 2026-07-24)
-- [x] **Current total: 16/30 contacts** toward the target, from 3 approved runs
+- [x] **Current total: 17/30 contacts** toward the target, from 5 approved runs
 - [ ] Still true: LinkedIn has no API/login access — approved methods are all
       public-search-result-only, which caps yield. This is a deliberate,
       documented scope decision, not an oversight
 - [ ] 30-contact target not yet met — needs either more regions/markets run
-      through the pipeline, or a higher contact hit rate per run
+      through the pipeline, or a higher contact hit rate per run. Calabria (0
+      contacts) and Trentino (1 contact) both landed well below Sicilia's 5 —
+      region count alone may not close the gap; Stage 05's hit rate is worth
+      revisiting as its own lever.
+- [x] **Calabria run completed, both gates approved**
+      (`evals/cases/09-water-utilities-italy-calabria.json`, run
+      `2026-07-26T10-37-38-791Z__705731b4`) — only 1 candidate found (Sorical
+      S.p.A.), expected since Sorical is now the sole regional water-service
+      operator for essentially all of Calabria; ARRICAL correctly excluded as
+      regulator, not utility. Scored 21/25 after a human-caught cross-reference
+      fix (see `project_context.md` 2026-07-26 entry) — 0 contacts (honest
+      empty result).
+- [x] **Trentino run completed, both gates approved**
+      (`evals/cases/10-water-utilities-italy-trentino.json`, run
+      `2026-07-26T12-50-05-944Z__a7c6658d`) — 18 candidates (Novareti S.p.A.
+      plus 17 municipalities), Novareti scored highest at 22/25, all 18
+      briefed, 1 contact found (Matteo Frisinghelli, Novareti).
 
 ---
 
@@ -247,33 +263,55 @@ roadmap listed them separately.
 
 ---
 
+## 9. Visual dashboard (future)
+
+**Status: Not started — deliberately deferred.**
+
+- [ ] Trigger to start: only once the pipeline has been generalized to a
+      second vertical/ICP beyond Italian water utilities (see
+      `ASSUMPTIONS-TO-REVISIT.md`), and only when the goal shifts to
+      demoing/pitching the system to external prospects
+- [ ] Scope when started: a simple, functional dashboard — NOT a decorative
+      graph visualization. Needed views: table of leads ranked by score with
+      evidence/justification visible per score; simple funnel view (signals
+      found → candidates → validated → scored → briefed → contacted); one
+      summary screen showing current run status/output
+- [ ] Explicitly out of scope: force-directed node graphs, animated
+      visualizations, or any UI complexity that doesn't directly help a
+      prospect evaluate the tool in under 2 minutes
+
+---
+
 ## Honest summary
 
 **Genuinely done, tested, and proven on real Italy data — all five stages:**
 Stage 01 (market signals) through Stage 05 (opportunity briefs + contacts) each
 have live execution paths, are gated on the right approvals, and have run
 successfully multiple times against the real target market — regional scale
-(Lombardia/Lazio, 6 candidates; Sicilia, 7 candidates) and national scale (all
-of Italy, 14 candidates). Both Review Gates have been exercised for real,
-including two genuine corrections a human caught that the pipeline had no way
-to catch itself (a funding figure that was internally consistent but simply
-wrong; an opportunity brief that was too conservative about a plan's named
-funding categories). 217 tests passing throughout.
+(Lombardia/Lazio, 6 candidates; Sicilia, 7 candidates; Calabria, 1 candidate;
+Trentino, 18 candidates) and national scale (all of Italy, 14 candidates).
+Both Review Gates have been exercised for real, including several genuine
+corrections a human caught that the pipeline had no way to catch itself (two
+internally-consistent-but-wrong funding figures; an opportunity brief that was
+too conservative about a plan's named funding categories; a missing
+cross-reference between two evidence items describing the same funding line
+at different points in time; a momentum score that leaned on an unconfirmed
+funding-eligibility signal). 217 tests passing throughout (10 eval cases).
 
-**Real product output exists:** three Gate-2-approved runs, real opportunity
+**Real product output exists:** five Gate-2-approved runs, real opportunity
 briefs with verified-fact/interpretation splits, and `contacts-master.md` with
-16 real, sourced, deduplicated contacts (of the 30 targeted) — up from 12
-after the Sicilia run added 5 more (one, Giovanni Sciortino, was already
-present from an earlier run and correctly deduplicated after fixing a
-cross-run company-name-matching bug in `buildContactsMaster.mjs`).
+17 real, sourced, deduplicated contacts (of the 30 targeted) — up from 16
+after Calabria (0 contacts, expected — Sorical is Calabria's sole regional
+operator with no named individual publicly confirmed) and Trentino (1 contact,
+Novareti) were both run and approved.
 
 **Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
 (decided against, not a gap), EU tender integration, and a curated Italian
-water-news source list (item 2). The contact target sits at 16/30 — next
-candidates for a regional run are Calabria or Trentino, since Sicilia is now
-covered and a rerun of an already-covered region tends to converge on
-candidates already found rather than surface new ones. The Gate 1/Gate 2 CLI
-gap (item 7) is now closed. Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is new —
-worth checking before any HULO hand-off, since several current defaults
-(scoring dimensions, contact target, target role categories, Italy scope)
-came from the assignment brief, not validated HULO input.
+water-news source list (item 2). The contact target sits at 17/30 — Calabria
+and Trentino both landed below Sicilia's 5-contact hit rate, so closing the
+gap may need more than just more regions; Stage 05's contact-finding hit rate
+itself is now worth a second look. The Gate 1/Gate 2 CLI gap (item 7) is
+closed. Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is worth checking before any HULO
+hand-off, since several current defaults (scoring dimensions, contact target,
+target role categories, Italy scope) came from the assignment brief, not
+validated HULO input.
