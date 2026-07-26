@@ -2,9 +2,9 @@
 
 Consolidated from every Review-Gate-2-approved run. Contacts here are informational only — nothing in this file triggers or implies outreach; each row still needs human verification before any use.
 
-**Contacts found: 20 / 30 (target)**
+**Contacts found: 22 / 30 (target)**
 
-Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea, 2026-07-26T10-37-38-791Z__705731b4, 2026-07-26T12-50-05-944Z__a7c6658d
+Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea, 2026-07-26T10-37-38-791Z__705731b4, 2026-07-26T12-50-05-944Z__a7c6658d, 2026-07-26T15-29-15-127Z__6f4bdfee
 
 | Name | Role | Company | Region | Source | Source Type | Status |
 |------|------|---------|--------|--------|--------------|--------|
@@ -28,3 +28,5 @@ Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08
 | Francesco Iennarella | Responsabile Cyber Security e Sistemi Informativi | Sorical S.p.A. (Società Risorse Idriche Calabresi) | Calabria | https://www.crotoneok.it/ecomondo-presentato-il-progetto-delle-reti-digitali-di-sorical/ | press-mention | unverified |
 | Mauro Locanto | Responsabile Area Investimenti e Servizi Tecnici | Sorical S.p.A. (Società Risorse Idriche Calabresi) | Calabria | https://www.crotoneok.it/ecomondo-presentato-il-progetto-delle-reti-digitali-di-sorical/ | press-mention | unverified |
 | Matteo Frisinghelli | Responsabile Operativo Servizio Idrico (Operational Water Service Manager) | Novareti S.p.A. | Trentino-Alto Adige (Province of Trento) | https://www.linkedin.com/in/matteo-frisinghelli-0414bb229/ | linkedin-search | unverified |
+| Andrea Mirandola | ICT Manager (Responsabile ICT) | Etra S.p.A. | Veneto (Padova, Treviso, Vicenza provinces) | https://www.theinnovationgroup.it/speakers/andrea-mirandola/ | press-mention | unverified |
+| Francesca Cavaletto | Engineer, designer, and BIM Coordinator | Acquevenete S.p.A. | Veneto (Padova, Rovigo, Vicenza, Verona, Venezia provinces) | https://www.acquevenete.it/innovazione | company-team-page | unverified |

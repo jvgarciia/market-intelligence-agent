@@ -365,7 +365,7 @@ test('runEvaluation() runs all real eval cases in mock mode and produces all fil
   const runsBase    = mkdtempSync(join(tmpdir(), 'eval-runs-'));
   try {
     const caseIds = listCases();
-    assert.equal(caseIds.length, 10, 'Should find 10 eval cases');
+    assert.equal(caseIds.length, 11, 'Should find 11 eval cases');
 
     for (const caseId of caseIds) {
       const result = runEvaluation(caseId, {
@@ -455,7 +455,7 @@ test('runEvaluation() comparison.json includes mock data warning and feature dif
 
 test('listCases() returns 10 cases', () => {
   const cases = listCases();
-  assert.equal(cases.length, 10, 'Should find exactly 10 eval cases');
+  assert.equal(cases.length, 11, 'Should find exactly 11 eval cases');
 });
 
 test('loadCase() loads a valid eval case', () => {
