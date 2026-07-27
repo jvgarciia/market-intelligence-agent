@@ -186,7 +186,13 @@ roadmap listed them separately.
       Viveracqua-consortium gestori), Alto Trevigiano Servizi scored highest
       at 17/25, 5 of 6 briefed (AcegasApsAmga correctly dropped for lacking
       validated evidence), 2 contacts found (Andrea Mirandola/Etra,
-      Francesca Cavaletto/Acquevenete).
+      Francesca Cavaletto/Acquevenete). Both gates were self-approved under
+      the standing auto-run instruction, not a human read-through — flagged
+      per the 2026-07-27 reporting-language correction in
+      `project_context.md`. First region to close with zero corrections
+      across all five stages; spot-checked afterward (same standard as the
+      BrianzAcque fix) — all three headline euro figures (ATS €26M, Etra
+      €43.73M, SIB spa €25.65M) confirmed exactly against original sources.
 
 ---
 
