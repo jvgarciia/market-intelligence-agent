@@ -149,7 +149,7 @@ roadmap listed them separately.
       double-count — see Project History), preserves manually-set `verified`
       status, and correctly drops a contact if its source run's Gate 2 is reset to
       pending (found and fixed a real bug here too — see Project History 2026-07-24)
-- [x] **Current total: 22/30 contacts** toward the target, from 6 approved runs
+- [x] **Current total: 26/30 contacts** toward the target, from 7 approved runs
 - [ ] Still true: LinkedIn has no API/login access — approved methods are all
       public-search-result-only, which caps yield. This is a deliberate,
       documented scope decision, not an oversight
@@ -193,6 +193,14 @@ roadmap listed them separately.
       across all five stages; spot-checked afterward (same standard as the
       BrianzAcque fix) — all three headline euro figures (ATS €26M, Etra
       €43.73M, SIB spa €25.65M) confirmed exactly against original sources.
+- [x] **Toscana run completed, both gates approved**
+      (`evals/cases/12-water-utilities-italy-toscana.json`, run
+      `2026-07-27T11-39-25-488Z__cac519a3`) — 6 candidates (Publiacqua, Acque
+      S.p.A., Acquedotto del Fiora, GAIA, ASA, Nuove Acque — one per ATO),
+      all scored (16-20/25), all 6 briefed, 4 contacts found (Publiacqua,
+      Acquedotto del Fiora, ASA, Nuove Acque); Acque S.p.A. and GAIA honestly
+      returned none. Both gates self-approved per standing instruction, no
+      independent human verification of contacts yet.
 
 ---
 
@@ -311,19 +319,20 @@ Stage 01 (market signals) through Stage 05 (opportunity briefs + contacts) each
 have live execution paths, are gated on the right approvals, and have run
 successfully multiple times against the real target market — regional scale
 (Lombardia/Lazio, 6 candidates; Sicilia, 7 candidates; Calabria, 1 candidate;
-Trentino, 18 candidates; Veneto, 6 candidates) and national scale (all of
-Italy, 14 candidates).
+Trentino, 18 candidates; Veneto, 6 candidates; Toscana, 6 candidates) and
+national scale (all of Italy, 14 candidates).
 Both Review Gates have been exercised for real, including several genuine
 corrections a human caught that the pipeline had no way to catch itself (two
 internally-consistent-but-wrong funding figures; an opportunity brief that was
 too conservative about a plan's named funding categories; a missing
 cross-reference between two evidence items describing the same funding line
 at different points in time; a momentum score that leaned on an unconfirmed
-funding-eligibility signal). 221 tests passing throughout (11 eval cases).
+funding-eligibility signal). 221 tests passing throughout (12 eval cases).
 
-**Real product output exists:** six Gate-2-approved runs, real opportunity
+**Real product output exists:** seven Gate-2-approved runs, real opportunity
 briefs with verified-fact/interpretation splits, and `contacts-master.md` with
-22 real, sourced, deduplicated contacts (of the 30 targeted) — Veneto added
+26 real, sourced, deduplicated contacts (of the 30 targeted) — Toscana added
+4 (Publiacqua, Acquedotto del Fiora, ASA, Nuove Acque), Veneto added
 2 (Etra, Acquevenete), Trentino added 1 (Novareti), and Calabria's initial
 0-contact result turned out to be run-to-run search variance, not a real
 ceiling: a Stage 05 re-run on the same candidate found 3 more (a 4th was
@@ -331,7 +340,8 @@ dropped for an unresolved name collision).
 
 **Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
 (decided against, not a gap), EU tender integration, and a curated Italian
-water-news source list (item 2). The contact target sits at 22/30. Trentino's
+water-news source list (item 2). The contact target sits at 26/30, 4 short.
+Trentino's
 low yield is genuinely explained by candidate type (17 of its 18 candidates
 are small municipal offices); Calabria's was not — worth spot-checking or
 re-running Stage 05 once before reading a low-contact result as a structural
