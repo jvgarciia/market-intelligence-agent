@@ -64,6 +64,29 @@ reappears — regardless of phrasing or how many other facts it is bundled with.
   weak evidence "pass" simply because it was phrased differently or grouped
   with stronger facts the second time it appears.
 
+## Entity-continuity recency rule
+
+Litigation, concession, merger, and transfer claims fail in a specific way:
+search ranks the loudest, most-covered moment — a dramatic court ruling, a
+"colpo di scena" headline — not the quiet moment that actually settles the
+outcome, like a council deciding not to appeal further, or a deal signed
+without fanfare. A ruling is a data point in an ongoing story, not
+necessarily its ending.
+
+- For any claim about a candidate's right to operate (litigation, concession
+  status, merger, subentro, acquisition), explicitly search for what happened
+  *after* the most dramatic event found — do not stop at the first or most
+  findable court ruling or news event.
+- Record the date through which the status was actually checked, not just
+  the publication date of the evidence cited. A claim describing a legal
+  dispute as "unresolved" is itself a claim with a shelf life — treat it the
+  same as any other claim that can go stale.
+- This is distinct from the recency thresholds above, which govern how old a
+  *source* may be before requiring re-corroboration. This rule is about
+  whether the *story* has moved on since that source was published — a claim
+  can cite a perfectly fresh source and still be wrong, if a quieter,
+  more-decisive development happened after it and wasn't searched for.
+
 ## Rejection reasons (the only allowed values)
 
 Use exactly one of these for `rejectionReason`:

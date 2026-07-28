@@ -2,7 +2,7 @@
 
 Consolidated from every Review-Gate-2-approved run. Contacts here are informational only — nothing in this file triggers or implies outreach; each row still needs human verification before any use.
 
-**Contacts found: 26 / 30 (target)**
+**Contacts found: 27 / 30 (target)**
 
 Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea, 2026-07-26T10-37-38-791Z__705731b4, 2026-07-26T12-50-05-944Z__a7c6658d, 2026-07-26T15-29-15-127Z__6f4bdfee, 2026-07-27T11-39-25-488Z__cac519a3
 
@@ -34,3 +34,4 @@ Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08
 | Michela Ticciati | Responsabile Unità Esercizio Area Operation (also referenced as "Responsabile tecnico"), Acquedotto del Fiora S.p.A. | Acquedotto del Fiora S.p.A. | Toscana — provinces of Grosseto, Siena (ATO6) | https://it.linkedin.com/in/ticciati-michela-06856411a | linkedin-search | unverified |
 | Michele Del Corso | Direttore Progettazione e Gestione Investimenti (Director of Planning and Investment Management), ASA S.p.A. | ASA S.p.A. | Toscana — provinces of Livorno, Pisa, Siena (ATO5 Toscana Costa) | https://www.asaspa.it/wp-content/uploads/2019/11/Del-Corso-Michele-CV-2019_rev2.pdf | company-team-page | unverified |
 | Francesca Menabuoni | Amministratore Delegato (CEO), Nuove Acque S.p.A. | Nuove Acque S.p.A. | Toscana — provinces of Arezzo, Siena (ATO4) | https://festivalacqua.org/protagonisti/francesca-menabuoni/ | press-mention | unverified |
+| Salvatore Pipus | Amministratore Delegato e Direttore Generale (CEO & General Manager), GEAL S.p.A. | GEAL S.p.A. | Toscana — Comune di Lucca (single-municipality historic affidamento within ATO1; distinct from ATO1's designated gestore, GAIA) | https://www.geal-lucca.it/2025/05/13/lassemblea-degli-azionisti-di-geal-s-p-a-approva-il-bilancio-2024/ | press-mention | unverified |

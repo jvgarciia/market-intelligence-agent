@@ -71,6 +71,34 @@ lead-gen run, they are not candidates.
   not two leads, unless there is direct evidence they serve genuinely
   different territories or customer bases.
 
+## Entity-continuity requirement
+- Italian water-utility structure changes constantly: municipal systems get
+  consolidated into a regional monopoly, one gestore merges into another,
+  a concession expires and is contested in court. A candidate can look like
+  a strong lead on every scoring dimension and still have no confirmed right
+  to sign a multi-year contract. Treat this as a first-class check, not an
+  afterthought.
+- For every candidate, record an `entityContinuity` object alongside
+  `relevanceEvidence`:
+  - `status` — one short phrase: e.g. `"stable"`, `"contested subentro in
+    progress"`, `"concession expiring <date>"`, `"recently merged into
+    <entity>"`.
+  - `concessionExpiry` — an ISO date if a concession/affidamento end date is
+    known, else `null`.
+  - `pendingTransfer` — a short description of any known merger, acquisition,
+    subentro, or transfer in progress, else `null`.
+  - `litigation` — a short description of any known dispute over the right
+    to operate, else `null`.
+- Where any of these is genuinely unknown from the available signals, say so
+  explicitly (`"unknown"` / `null`) — do not guess a stable status just
+  because no contrary signal was found. Absence of evidence is not evidence
+  of stability.
+- This is about the candidate's **right to operate**, not its financial
+  health — do not conflate this with `momentumSignal` or `nrwEvidence`. A
+  candidate mid-transfer or mid-litigation should still be scored normally on
+  the five ICP dimensions; `entityContinuity` is a separate signal a human
+  reviewer uses to judge whether the score is actionable right now.
+
 # Output schema
 - `02-candidates.json` — array of `candidate-organisation`.
 

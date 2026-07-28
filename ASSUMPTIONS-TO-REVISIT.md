@@ -190,3 +190,61 @@ noticed because it wasn't needed yet.
 (contacted date, response, outcome) before this file is used to actually
 run a campaign — otherwise there's no way to tell a fresh lead from one
 already contacted.
+
+---
+
+## 9. Scoring rubric has no entity-continuity dimension
+
+**Where:** `references/scoring-rubric.md`, `04_opportunity-scoring/` (the five
+ICP dimensions).
+
+**What was decided:** The rubric scores `utilitySize`, `nrwEvidence`,
+`regionFit`, `targetRolePresence`, and `momentumSignal` — nothing checks
+whether a candidate has a confirmed right to operate long enough to sign a
+multi-year contract. GEAL S.p.A. (Toscana run, `cand-7`) scored 16/25 —
+respectable — while it was confirmed to be merging into GAIA (TAR Toscana
+ruling against Lucca on the merits, April 2026; Lucca declined to appeal
+further, June 2026). An early pass at this correction scored GEAL down
+*and* excluded it for the same underlying fact — double-counting one risk
+in two places. Corrected: `momentumSignal` was reverted to an evidence-only
+score (measuring only "is there a recent, named, funded initiative," per
+the rubric's own definition), and the entity-continuity risk is now carried
+entirely by the additive `leadQualification.excluded` field. Reasoning: a
+dimension score should answer one question so it stays useful as a
+counterfactual ("what would this candidate be worth if it weren't being
+absorbed") — conflating the disqualifier into the score would have made
+that question unanswerable, and silently penalizing the same fact twice is
+a modeling smell regardless.
+
+**Revisit — raise with Frans/Elena in week 1:** Whether this interim
+"clean score + separate disqualifier" policy should become the permanent
+rule, or whether a sixth scoring dimension is still warranted for cases
+where continuity risk is partial (not full disqualification but a
+timing/probability haircut) is still open. For Italian water utilities
+specifically, entity continuity (consolidation, mergers, contested
+concessions) is the sector's defining structural dynamic, not an edge case —
+see item 10 below and `project_context.md`'s 2026-07-28 GEAL
+entity-continuity entries.
+
+---
+
+## 10. Sicilia's ATO 3 (Messina) and ATO 7 (Trapani) are not fully assigned
+
+**Where:** `evals/cases/08-water-utilities-italy-sicilia.json`, run
+`2026-07-25T09-40-14-107Z__b5971aea`.
+
+**What was decided:** ARERA's February 2026 monitoring report states both
+ATO 3 Messina and ATO 7 Trapani are still not fully assigned to a single
+gestore under Legislative Decree 152/2006 — both areas are described as
+having multiple small municipal management entities, the same miss-shape
+that caused the Toscana run to originally miss GEAL. Deliberately not
+chased in this session: unassigned ATOs mean small municipal entities,
+structurally identical to Trentino's 17 municipality candidates (which
+yielded 1 contact from 17 candidates) — low expected yield for the research
+cost. ATI Trapani and ATI Ragusa already give a governance-level entry
+point into both areas.
+
+**Revisit:** Only worth chasing individual Messina/Trapani municipal
+gestori if the 30-contact target still isn't met after cheaper options
+(Stage 05 re-runs on 0-contact candidates, additional whole regions) are
+exhausted.
