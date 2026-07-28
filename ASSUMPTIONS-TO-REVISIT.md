@@ -248,3 +248,74 @@ point into both areas.
 gestori if the 30-contact target still isn't met after cheaper options
 (Stage 05 re-runs on 0-contact candidates, additional whole regions) are
 exhausted.
+
+---
+
+## 11. Data readiness is a missing ICP dimension
+
+**Where:** `references/scoring-rubric.md`, `04_opportunity-scoring/` (the
+five ICP dimensions) — same location as item 9.
+
+**What was decided:** None of the five current dimensions capture whether a
+utility's own infrastructure is *ready* to run leak-detection analytics in
+the first place. GEAL S.p.A. (Toscana run, `cand-7`) had completed 100%
+district metering across 74 districts (ev-48) — a utility that has
+districtized its network can actually deploy and act on leak-detection
+data; one that hasn't, structurally can't yet, no matter how large its NRW
+problem is. Commercially, that readiness gap may matter more than raw
+utility size, and nothing in the current rubric scores it.
+
+**Revisit — raise with Frans/Elena in week 1:** Whether data
+readiness/districtization should become a sixth scoring dimension, fold
+into `nrwEvidence`'s existing definition, or stay a qualitative note in the
+brief. Flagged the same day as item 9 (entity continuity) — both are
+structural Italian-water-sector dynamics the original five dimensions
+didn't anticipate, not one-off exceptions.
+
+---
+
+## 12. `momentumSignal`'s undocumented time-dependency
+
+**Where:** `momentumSignal` scoring dimension (item 1);
+`deliverables/pnrr-dependency.md` (Phase 3).
+
+**What was decided:** A `momentumSignal` score is computed once, at run
+time, from evidence about a funded initiative's *current* status. Nothing
+in the schema or the score itself records that the score has an implicit
+expiry: nearly every `momentumSignal` in this project traces back to a
+PNRR-funded project, and the RRF Regulation requires all PNRR
+milestones/targets complete by 31 August 2026. A 5/5 today silently becomes
+a claim about a *finished* project after that date — the score doesn't
+change, but what it means does.
+
+**Revisit once real HULO input exists:** Either add an explicit
+score-validity/expiry field to the `opportunity-score` schema, or treat
+`deliverables/pnrr-dependency.md`'s per-candidate PNRR tag as a required
+pre-outreach check rather than an optional one — right now nothing forces
+anyone to look at it before acting on an old score.
+
+---
+
+## 13. The frozen-evidence-base design rationale
+
+**Where:** the whole staged-artifact pipeline (`01_market-signals` through
+`05_opportunity-brief`), specifically why Stage 04/05 can be re-run
+independently of Stage 01-03.
+
+**What was decided (not previously written down explicitly):** The
+pipeline is built as separately-persisted, separately-re-runnable staged
+artifacts specifically so that an ICP change from HULO — new scoring
+dimensions, new target role categories — only requires re-running Stage 04
+(scoring) and Stage 05 (briefs/contacts) against the *existing* validated
+evidence base (Stage 01-03's output), not a full pipeline re-run. This is
+why evidence validation (Stage 03) is a separate, persisted stage rather
+than inlined into scoring, and why `runStage04Local.mjs`/
+`runStage05Local.mjs` only require Stage 01 approval + upstream completion,
+not a fresh Stage 01/02/03 pass.
+
+**Revisit once real HULO input exists:** Confirm this assumption holds once
+an actual ICP calibration happens (Phase 3's stated next step) — if the
+new target roles or dimensions need evidence Stage 01 never hunted for
+(e.g. data-readiness signals per item 11), a Stage 01 re-run becomes
+unavoidable for that gap, even though scoring/briefing can still be
+re-run cheaply for everything the existing evidence base already covers.

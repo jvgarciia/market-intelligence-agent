@@ -213,33 +213,29 @@ roadmap listed them separately.
 
 ## 6. Clean output format
 
-**Status: NEXT UP (Phase 3) — contact target (item 5) is met, this is now the
-main remaining gap. Two open decisions must be resolved at the start of that
-session before building anything — see `project_context.md`'s 2026-07-29
-"Next planned work" entry for full detail:**
+**Status: DONE (Phase 3, 2026-07-29).** Both open decisions from the prior
+session were resolved and built:
 
-1. **Top-5 selection rule** — not agreed yet. `totalScore` alone won't
-   discriminate well within a region (e.g. Toscana's six candidates all
-   scored 16-20). User's instinct: `momentumSignal` should break ties, since
-   an active named funded initiative is a real buying signal and a high
-   NRW% alone is just distress. Propose a rule, get sign-off, then build.
-2. **PNRR dependency flag** — nearly every `momentumSignal` across every
-   approved run is PNRR-anchored (Etra, SIB spa, Novareti/Rovereto,
-   BrianzAcque, GEAL, Calabria), and RRF Regulation requires all PNRR
-   milestones/targets complete by 31 August 2026. Go through all seven
-   Gate-2-approved runs and tag each candidate's `momentumSignal` as
-   fully/partly/not PNRR-anchored — a re-source list for a pre-outreach
-   refresh, not a re-score. Report as a list; don't re-score anything.
-3. Also add a `dataAsOf` freshness field per contact/evidence item (when the
-   underlying fact was sourced, not when the run executed) — both exports
-   need a freshness column, since this dataset gets used for outreach in
-   ~3 months.
-4. Log two new `ASSUMPTIONS-TO-REVISIT.md` entries: `momentumSignal`'s
-   undocumented time-dependency (a 5/5 today silently becomes a claim about
-   a finished project after August 2026), and the frozen-evidence-base
-   design rationale (an ICP change from HULO means re-running Stage 04/05
-   only, not the whole pipeline — the reason this was built as staged
-   artifacts).
+1. **Top-5 selection rule — resolved.** Hard filters first (named
+   target-role contact with a source URL; not excluded on entity
+   continuity; validated NRW evidence, size alone doesn't qualify), then
+   rank survivors by `totalScore`, `momentumSignal` breaking ties. Built in
+   `lib/buildQualifiedLeads.mjs` (`npm run leads:build` →
+   `deliverables/qualified-leads.md`, labelled "V1 — pending ICP
+   calibration with HULO"). Real result: 19 of 59 scored candidates
+   qualified; GEAL correctly excluded regardless of its 16/25 score.
+2. **PNRR dependency flag — built.** `lib/buildPnrrFlags.mjs`
+   (`npm run pnrr:flags` → `deliverables/pnrr-dependency.md`) tags each
+   scored candidate fully/partly/not PNRR-anchored, verified against all 6
+   examples named in the assignment. Real result: 21 fully / 24 partly / 14
+   not anchored, out of 59. A re-source list, not a re-score.
+3. **`dataAsOf` — built.** `lib/contactDataAsOf.mjs` recovers per-contact
+   sourcing dates from a run's `gate2-approved-backup*` snapshots — proven
+   against the real Sicilia composite-briefs case (original 5 contacts date
+   to the first pass, AICA/Acoset's 2 date to the later targeted re-run).
+4. **`ASSUMPTIONS-TO-REVISIT.md` entries — logged** (items 11-13: data
+   readiness/districtization as a missing dimension, `momentumSignal`'s
+   time-dependency, the frozen-evidence-base design rationale).
 
 - [x] Opportunity-brief schema implemented and live: title, why it matters,
       verified facts vs. model interpretation, uncertainties, recommended next
@@ -253,14 +249,15 @@ session before building anything — see `project_context.md`'s 2026-07-29
       including one real factual correction caught by human review that the
       pipeline itself had no way to catch (see Project History 2026-07-23/24)
 - [x] `contacts-master.md` is a real, hand-off-shaped rollup of contacts across runs
-- [ ] No export format for a full hand-off deliverable (e.g. CSV/sheet of
-      "30 contacts + 5 qualified leads") — current output is markdown/JSON under
-      `runs/<run-id>/` plus `contacts-master.md`, not a single file you'd hand
-      to someone as "the deliverable"
-- [ ] "5+ qualified leads" isn't formally tracked as its own list yet — the
-      scored/briefed candidates across both approved runs (Acea Ato 2, BrianzAcque,
-      Gruppo CAP, Uniacque, AQP, SMAT, Publiacqua, and others all scored 17+/25)
-      are the de facto lead list, but nothing exports or ranks them as "the 5"
+- [x] Full hand-off deliverable exists: `deliverables/contacts.csv` (30
+      contacts, 11 columns incl. per-contact `dataAsOf` and confidence),
+      `deliverables/contacts-summary.md` (confidence distribution),
+      `deliverables/qualified-leads.md` (V1), `deliverables/pnrr-dependency.md`
+      — all regenerable together via `npm run deliverables:build`.
+- [x] "Qualified leads" is now a real, filtered, ranked, exported list —
+      `deliverables/qualified-leads.md` — not just "the scored candidates,
+      informally." 19 of 59 scored candidates across all 7 approved runs
+      pass the hard filters; Novareti (22/25) leads.
 
 ---
 
@@ -375,19 +372,27 @@ Reaching 30 did not require an 8th region — a second, surgical Stage 05
 re-run pass on the pipeline's remaining known 0-contact candidates closed the
 gap (GAIA's own re-run still found nothing, a stable honest empty result).
 
-**Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
-(decided against, not a gap), EU tender integration, and a curated Italian
-water-news source list (item 2). Live search is non-deterministic and there's
-currently no tool-call logging (`toolActivity` in `localCli.mjs` is hardcoded
-`'not_available'`) to diagnose a low-contact result from the run artifacts
-alone — spot-checking or re-running Stage 05 once remains the working method
-for telling a real ceiling from search variance, and it worked again this
-session (Sicilia, Toscana). The Gate 1/Gate 2 CLI gap (item 7) is closed.
-Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is worth checking before any HULO
-hand-off, since several current defaults (scoring dimensions, contact target,
-target role categories, Italy scope) came from the assignment brief, not
-validated HULO input — now including item 9 (no entity-continuity scoring
-dimension) and item 10 (Sicilia's two unassigned ATOs), both added this
-session after the GEAL correction. Item 6 (a real hand-off deliverable —
-contacts CSV + a top-5 qualified-leads export) is the actual remaining gap
-now that the contact target is met, and is the next planned piece of work.
+**Hand-off deliverable now exists (2026-07-29):** `deliverables/contacts.csv`
+(30 contacts, 11 columns incl. per-contact `dataAsOf`),
+`deliverables/qualified-leads.md` (19 of 59 candidates qualified, V1 —
+pending ICP calibration with HULO), `deliverables/pnrr-dependency.md` (21
+fully / 24 partly / 14 not PNRR-anchored), all regenerable via
+`npm run deliverables:build`. `REPORT-NOTES.md` now holds the
+university-report source of truth (8 failure modes + limitations).
+
+**Still missing:** LinkedIn API/login access (decided against, not a gap),
+EU tender integration, and a curated Italian water-news source list (item 2).
+Live search is non-deterministic and there's currently no tool-call logging
+(`toolActivity` in `localCli.mjs` is hardcoded `'not_available'`) to diagnose
+a low-contact result from the run artifacts alone — spot-checking or
+re-running Stage 05 once remains the working method for telling a real
+ceiling from search variance. The Gate 1/Gate 2 CLI gap (item 7) is closed.
+`ASSUMPTIONS-TO-REVISIT.md` (item 8) now has 13 entries and is worth
+checking before any HULO hand-off, since several current defaults (scoring
+dimensions, contact target, target role categories, Italy scope, and now
+also data readiness/momentumSignal time-dependency/the frozen-evidence-base
+rationale) came from the assignment brief or this session's own build
+choices, not validated HULO input. With items 5 and 6 both done, the
+assignment's stated deliverable (30+ contacts, 5+ qualified leads, in a
+hand-off-ready format) is complete. Per explicit instruction, no 8th region,
+dashboard, or outbound drafting system was started this session.
