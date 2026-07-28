@@ -149,21 +149,20 @@ roadmap listed them separately.
       double-count — see Project History), preserves manually-set `verified`
       status, and correctly drops a contact if its source run's Gate 2 is reset to
       pending (found and fixed a real bug here too — see Project History 2026-07-24)
-- [x] **Current total: 26/30 contacts** toward the target, from 7 approved runs
+- [x] **Current total: 30/30 contacts — target met** (2026-07-29), from 7
+      approved runs
 - [ ] Still true: LinkedIn has no API/login access — approved methods are all
       public-search-result-only, which caps yield. This is a deliberate,
       documented scope decision, not an oversight
-- [ ] 30-contact target not yet met — needs either more regions/markets run
-      through the pipeline, or a higher contact hit rate per run. Diagnosed
-      the low Calabria/Trentino numbers (see `project_context.md` 2026-07-26
-      contact-yield entry): Trentino's 1 contact is genuinely explained by
-      candidate type (17 of 18 candidates are small municipal offices), but
-      Calabria's initial 0 was run-to-run search non-determinism, not a
-      structural limit — a second Stage 05 pass on the same candidate found
-      3 real contacts. `toolActivity` is still hardcoded `'not_available'`
-      in `localCli.mjs`, so a genuinely low yield still can't be diagnosed
-      from logs alone; worth a re-run or spot-check before concluding "no
-      contacts exist" for a candidate.
+- [x] 30-contact target reached without needing an 8th region: a targeted
+      Stage 05 re-run on the pipeline's remaining 0-contact candidates
+      (Sicilia's AICA and Acoset; Toscana's Acque S.p.A.) closed the gap.
+      GAIA's own re-run found nothing a second time — a stable, honest
+      empty result, not a diagnosable miss. `toolActivity` is still
+      hardcoded `'not_available'` in `localCli.mjs`, so a genuinely low
+      yield still can't be diagnosed from logs alone; a re-run or spot-check
+      before concluding "no contacts exist" for a candidate remains the
+      working method, not a logging fix.
 - [x] **Calabria run completed, both gates approved**
       (`evals/cases/09-water-utilities-italy-calabria.json`, run
       `2026-07-26T10-37-38-791Z__705731b4`) — only 1 candidate found (Sorical
@@ -200,7 +199,15 @@ roadmap listed them separately.
       all scored (16-20/25), all 6 briefed, 4 contacts found (Publiacqua,
       Acquedotto del Fiora, ASA, Nuove Acque); Acque S.p.A. and GAIA honestly
       returned none. Both gates self-approved per standing instruction, no
-      independent human verification of contacts yet.
+      independent human verification of contacts yet. A 7th candidate, GEAL
+      S.p.A. (Comune di Lucca), was added the same day as a missed ATO1
+      gestore, then corrected twice over entity-continuity research: GEAL is
+      confirmed to be merging into GAIA (settled on the merits, no further
+      appeal), excluded from qualified leads via `leadQualification`, scored
+      16/25 on a clean evidence-only basis. GAIA held at 16/25 unchanged
+      (the pending Lucca absorption recorded via `openOpportunities`, not a
+      score change). A second Stage 05 pass added Acque S.p.A.'s first
+      contact (Andrea Guastamacchia); GAIA's re-run still found none.
 
 ---
 
@@ -331,24 +338,30 @@ funding-eligibility signal). 221 tests passing throughout (12 eval cases).
 
 **Real product output exists:** seven Gate-2-approved runs, real opportunity
 briefs with verified-fact/interpretation splits, and `contacts-master.md` with
-26 real, sourced, deduplicated contacts (of the 30 targeted) — Toscana added
-4 (Publiacqua, Acquedotto del Fiora, ASA, Nuove Acque), Veneto added
-2 (Etra, Acquevenete), Trentino added 1 (Novareti), and Calabria's initial
-0-contact result turned out to be run-to-run search variance, not a real
-ceiling: a Stage 05 re-run on the same candidate found 3 more (a 4th was
-dropped for an unresolved name collision).
+**30/30 real, sourced, deduplicated contacts — target met** (2026-07-29).
+Toscana contributed 5 total across two passes (Publiacqua, Acquedotto del
+Fiora, ASA, Nuove Acque, Acque S.p.A.), Sicilia's second pass added 2 more
+(AICA, Acoset), Veneto added 2 (Etra, Acquevenete), Trentino added 1
+(Novareti), and Calabria's initial 0-contact result turned out to be
+run-to-run search variance, not a real ceiling: a Stage 05 re-run on the same
+candidate found 3 more (a 4th was dropped for an unresolved name collision).
+Reaching 30 did not require an 8th region — a second, surgical Stage 05
+re-run pass on the pipeline's remaining known 0-contact candidates closed the
+gap (GAIA's own re-run still found nothing, a stable honest empty result).
 
 **Still missing:** a CSV/hand-off export (item 6), LinkedIn API/login access
 (decided against, not a gap), EU tender integration, and a curated Italian
-water-news source list (item 2). The contact target sits at 26/30, 4 short.
-Trentino's
-low yield is genuinely explained by candidate type (17 of its 18 candidates
-are small municipal offices); Calabria's was not — worth spot-checking or
-re-running Stage 05 once before reading a low-contact result as a structural
-limit, since live search is non-deterministic and there's currently no
-tool-call logging (`toolActivity` in `localCli.mjs` is hardcoded
-`'not_available'`) to diagnose it from the run artifacts alone. The Gate
-1/Gate 2 CLI gap (item 7) is closed. Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is
-worth checking before any HULO hand-off, since several current defaults
-(scoring dimensions, contact target, target role categories, Italy scope)
-came from the assignment brief, not validated HULO input.
+water-news source list (item 2). Live search is non-deterministic and there's
+currently no tool-call logging (`toolActivity` in `localCli.mjs` is hardcoded
+`'not_available'`) to diagnose a low-contact result from the run artifacts
+alone — spot-checking or re-running Stage 05 once remains the working method
+for telling a real ceiling from search variance, and it worked again this
+session (Sicilia, Toscana). The Gate 1/Gate 2 CLI gap (item 7) is closed.
+Item 8 (`ASSUMPTIONS-TO-REVISIT.md`) is worth checking before any HULO
+hand-off, since several current defaults (scoring dimensions, contact target,
+target role categories, Italy scope) came from the assignment brief, not
+validated HULO input — now including item 9 (no entity-continuity scoring
+dimension) and item 10 (Sicilia's two unassigned ATOs), both added this
+session after the GEAL correction. Item 6 (a real hand-off deliverable —
+contacts CSV + a top-5 qualified-leads export) is the actual remaining gap
+now that the contact target is met, and is the next planned piece of work.

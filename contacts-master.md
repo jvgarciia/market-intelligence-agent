@@ -2,7 +2,7 @@
 
 Consolidated from every Review-Gate-2-approved run. Contacts here are informational only — nothing in this file triggers or implies outreach; each row still needs human verification before any use.
 
-**Contacts found: 27 / 30 (target)**
+**Contacts found: 30 / 30 (target)**
 
 Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08-49-42-948Z__cfa09872, 2026-07-25T09-40-14-107Z__b5971aea, 2026-07-26T10-37-38-791Z__705731b4, 2026-07-26T12-50-05-944Z__a7c6658d, 2026-07-26T15-29-15-127Z__6f4bdfee, 2026-07-27T11-39-25-488Z__cac519a3
 
@@ -22,6 +22,8 @@ Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08
 | Enrico Pochettino | Direttore Innovazione (Director of Innovation) | Gruppo Iren | Piemonte / Liguria / Emilia-Romagna | https://www.linkedin.com/in/enrico-pochettino-772b478/ | linkedin-search | unverified |
 | Massimo Burruano | Dirigente operazioni | Siciliacque S.p.A. | Sicilia | https://www.linkedin.com/in/massimo-burruano-809229176/ | linkedin-search | unverified |
 | Davide Maimone | Direttore Generale | AMAM S.p.A. (Azienda Meridionale Acque Messina) | Sicilia (Messina) | https://www.messinaindiretta.it/messina-davide-maimone-nominato-direttore-generale-dellamam/ | press-mention | unverified |
+| Claudio Guarneri | Direttore Generale | AICA (Azienda Idrica Comuni Agrigentini) | Sicilia (Agrigento province) | https://www.grandangoloagrigento.it/agrigento-notizie/crisi-idrica-nellagrigentino-come-funziona-il-servizio-di-autobotti-lintervista-al-direttore-generale-di-aica-claudio-guarneri | press-mention | unverified |
+| Antonio Coniglio | Direttore Generale | Acoset S.p.A. | Sicilia (Catania province — Consorzio Calatino) | https://www.virgilio.it/italia/catania/notizielocali/acoset_antonio_coniglio_confermato_direttore_generale_dell_azienda-74709116.html | press-mention | unverified |
 | Pierluigi Carugno | Direttore Generale | ATI Trapani (Assemblea Territoriale Idrica di Trapani), formerly ATO Idrico n°7 Trapani | Sicilia (Trapani province) | https://www.trapanisi.it/ati-trapani-revocato-il-commissariamento-regionale-si-apre-fase-decisiva-per-il-servizio-idrico/ | press-mention | unverified |
 | Bartolo Giaquinta | Presidente (Sindaco di Giarratana) | ATI Ragusa (Assemblea Territoriale Idrica di Ragusa) | Sicilia (Ragusa province) | https://www.ildomanibleo.com/2026/06/19/ati-ragusa-progetti-bocciati-dalla-regione-mauro-chiede-il-commissariamento-la-replica-di-giaquinta/ | press-mention | unverified |
 | Giovanni Paolo Marati | Direttore Generale (Director General) | Sorical S.p.A. (Società Risorse Idriche Calabresi) | Calabria | https://www.corrieredellacalabria.it/2026/02/07/il-dg-marati-sorical-sta-costruendo-un-modello-pubblico-unico-nel-mezzogiorno/ | press-mention | unverified |
@@ -31,6 +33,7 @@ Source runs (Gate 2 approved): 2026-07-23T15-29-14-971Z__736be5a4, 2026-07-24T08
 | Andrea Mirandola | ICT Manager (Responsabile ICT) | Etra S.p.A. | Veneto (Padova, Treviso, Vicenza provinces) | https://www.theinnovationgroup.it/speakers/andrea-mirandola/ | press-mention | unverified |
 | Francesca Cavaletto | Engineer, designer, and BIM Coordinator | Acquevenete S.p.A. | Veneto (Padova, Rovigo, Vicenza, Verona, Venezia provinces) | https://www.acquevenete.it/innovazione | company-team-page | unverified |
 | Luciano Caroti | ICT Manager, Publiacqua S.p.A. | Publiacqua S.p.A. | Toscana — provinces of Firenze, Prato, Pistoia, Arezzo (ATO3) | https://www.linkedin.com/in/luciano-caroti-4423263/ | linkedin-search | unverified |
+| Andrea Guastamacchia | Amministratore Delegato | Acque S.p.A. | Toscana — provinces of Pisa, Lucca, Firenze (ATO2) | https://www.acque.net/notizie/andrea-guastamacchia-nuovo-ad-di-acque/ | company-team-page | unverified |
 | Michela Ticciati | Responsabile Unità Esercizio Area Operation (also referenced as "Responsabile tecnico"), Acquedotto del Fiora S.p.A. | Acquedotto del Fiora S.p.A. | Toscana — provinces of Grosseto, Siena (ATO6) | https://it.linkedin.com/in/ticciati-michela-06856411a | linkedin-search | unverified |
 | Michele Del Corso | Direttore Progettazione e Gestione Investimenti (Director of Planning and Investment Management), ASA S.p.A. | ASA S.p.A. | Toscana — provinces of Livorno, Pisa, Siena (ATO5 Toscana Costa) | https://www.asaspa.it/wp-content/uploads/2019/11/Del-Corso-Michele-CV-2019_rev2.pdf | company-team-page | unverified |
 | Francesca Menabuoni | Amministratore Delegato (CEO), Nuove Acque S.p.A. | Nuove Acque S.p.A. | Toscana — provinces of Arezzo, Siena (ATO4) | https://festivalacqua.org/protagonisti/francesca-menabuoni/ | press-mention | unverified |
