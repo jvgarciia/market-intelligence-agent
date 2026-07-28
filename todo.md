@@ -213,7 +213,33 @@ roadmap listed them separately.
 
 ## 6. Clean output format
 
-**Status: Mostly done — briefs are real and reviewed; no hand-off export yet.**
+**Status: NEXT UP (Phase 3) — contact target (item 5) is met, this is now the
+main remaining gap. Two open decisions must be resolved at the start of that
+session before building anything — see `project_context.md`'s 2026-07-29
+"Next planned work" entry for full detail:**
+
+1. **Top-5 selection rule** — not agreed yet. `totalScore` alone won't
+   discriminate well within a region (e.g. Toscana's six candidates all
+   scored 16-20). User's instinct: `momentumSignal` should break ties, since
+   an active named funded initiative is a real buying signal and a high
+   NRW% alone is just distress. Propose a rule, get sign-off, then build.
+2. **PNRR dependency flag** — nearly every `momentumSignal` across every
+   approved run is PNRR-anchored (Etra, SIB spa, Novareti/Rovereto,
+   BrianzAcque, GEAL, Calabria), and RRF Regulation requires all PNRR
+   milestones/targets complete by 31 August 2026. Go through all seven
+   Gate-2-approved runs and tag each candidate's `momentumSignal` as
+   fully/partly/not PNRR-anchored — a re-source list for a pre-outreach
+   refresh, not a re-score. Report as a list; don't re-score anything.
+3. Also add a `dataAsOf` freshness field per contact/evidence item (when the
+   underlying fact was sourced, not when the run executed) — both exports
+   need a freshness column, since this dataset gets used for outreach in
+   ~3 months.
+4. Log two new `ASSUMPTIONS-TO-REVISIT.md` entries: `momentumSignal`'s
+   undocumented time-dependency (a 5/5 today silently becomes a claim about
+   a finished project after August 2026), and the frozen-evidence-base
+   design rationale (an ICP change from HULO means re-running Stage 04/05
+   only, not the whole pipeline — the reason this was built as staged
+   artifacts).
 
 - [x] Opportunity-brief schema implemented and live: title, why it matters,
       verified facts vs. model interpretation, uncertainties, recommended next
